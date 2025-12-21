@@ -46,3 +46,7 @@ print("=== Day 7 ===")
 for plant in plants:
     plant.get_info()
     print(f"Growth this week: +{plant.height - plant.old_height}cm")
+
+# Clean up temporary attributes
+for plant in plants:
+    del plant.old_height
