@@ -7,7 +7,8 @@ class Plant:
         self.type = "regular"
 
     def grow(self, grow_size: int) -> int:
-        """Growing a plant by 1cm by default if the user doesn't explicit the size of growth"""
+        """Growing a plant by 1cm by default if the
+        user doesn't explicit the size of growth"""
         self.height += grow_size
         print(f"{self.name} grew {grow_size}cm")
         return (grow_size)
@@ -15,6 +16,7 @@ class Plant:
     def get_info(self) -> str:
         """Display plant stats"""
         return f"{self.name}: {self.height}cm"
+
 
 class FloweringPlant(Plant):
     """Specific type of plants which will produce a flowers"""
@@ -35,10 +37,11 @@ class FloweringPlant(Plant):
         base_info = super().get_info()
         color = f", {self.color} flowers "
         if self.blooming:
-            blooming = f"(blooming)"
+            blooming = "(blooming)"
         else:
-            blooming = f""
+            blooming = ""
         return base_info + color + blooming
+
 
 class PrizeFlower(FloweringPlant):
     """Flowering Plant with a prize state"""
@@ -60,6 +63,7 @@ class PrizeFlower(FloweringPlant):
         base_info = super().get_info()
         prize_point = f", Prize points: {self.prize_point}"
         return base_info + prize_point
+
 
 class Garden:
     """Base structure of a garden"""
@@ -107,7 +111,8 @@ class Garden:
                 print(f"- {plant.get_info()}")
         print("")
         # Printing the formatted result
-        print(f"Plants added: {self.plants_count}, Total growth: {self.total_growth}cm")
+        print(f"Plants added: {self.plants_count}, ", end="")
+        print(f"Total growth: {self.total_growth}cm")
         regular = f"Plant types: {self.regular_plants} regular, "
         flowering = f"{self.flowering_plants} flowering, "
         prize = f"{self.prize_plants} prize flowers"
@@ -126,7 +131,6 @@ class GardenManager:
         # That for managers network later.
         GardenManager.all_managers[GardenManager.managers_count] = self
         GardenManager.managers_count += 1
-        
 
     def add_garden(self, garden: object) -> None:
         """Add a specific garden to the manager list of gardens"""
@@ -180,58 +184,59 @@ class GardenManager:
             print("Garden scores - ", end="")
             i = 0
             while self.gardens_list[i] is not None:
-                print(f"{self.gardens_list[i].owner}: {self.gardens_list[i].score}", end="")
+                print(f"{self.gardens_list[i].owner}: ", end="")
+                print(f"{self.gardens_list[i].score}", end="")
                 if self.gardens_list[i + 1] is not None:
                     print(", ", end="")
                 i += 1
             print("")
             print(f"Total gardens managed: {self.gardens_count}")
 
-
     def create_garden_network(cls) -> None:
         """Create a garden network and return the gardens"""
-        print(f"Garden network initialized ", end="")
+        print("Garden network initialized ", end="")
         print(f"with {cls.managers_count} managers")
         return cls.all_managers
     create_garden_network = classmethod(create_garden_network)
 
+
 print("=== Garden Management System Demo ===")
 print("")
 
-#-- Create a Garden Manager --
+# -- Create a Garden Manager --
 manager = GardenManager()
 
-# Create Alice's garden and add plants
+# -- Create Alice's garden and add plants
 alice_garden = Garden("Alice", "Alice's")
-# Create some plants for Alice's garden
+# -- Create some plants for Alice's garden
 oak_tree = Plant("Oak Tree", 100)
 rose = FloweringPlant("Rose", 25, "red", True)
 sun_flower = PrizeFlower("Sunflower", 50, "yellow", True, 10)
-# Add plants to Alice's garden
+# -- Add plants to Alice's garden
 alice_garden.add_plant(oak_tree)
 alice_garden.add_plant(rose)
 alice_garden.add_plant(sun_flower)
 print("")
-# Growing the plants in garden
+# -- Growing the plants in garden
 alice_garden.growing_plants()
 print("")
-# Report the garden stats
+# -- Report the garden stats
 alice_garden.garden_report()
 print("")
 
-# Create Bob's garden and add plants
+# -- Create Bob's garden and add plants
 bob_garden = Garden("Bob", "Bob's")
-# Create some plants for Bob's garden
+# -- Create some plants for Bob's garden
 cactus = Plant("Cactus", 30)
 daffodil = Plant("Daffodil", 42)
-# Add plants to Bob's garden silently
-bob_garden.add_plant(cactus, silent = True)
-bob_garden.add_plant(daffodil, silent = True)
+# -- Add plants to Bob's garden silently
+bob_garden.add_plant(cactus, silent=True)
+bob_garden.add_plant(daffodil, silent=True)
 
-# Add the gardens to the manager
+# -- Add the gardens to the manager
 manager.add_garden(alice_garden)
 manager.add_garden(bob_garden)
 
-# Pass the garden to calculate its stats
+# -- Pass the garden to calculate its stats
 stats = manager.GardenStats(manager)
 stats.parse_and_display_stats()
