@@ -24,4 +24,12 @@ At the module0 there is 7 exercises, each one aim to make you more familiar with
 inheritance of classes also nested classes, classmethods, staticmethods,
 also how to design a small system with a complex component.**
 
+### Module02
+- 0: Introduction to the exception and discover how u prevent your program from crashing.
+- 1: Playing with different builtin error types.
+- 2: Discover the ability to create a custom type error.
+- 3: Understand the benefits of using finally statement.
+- 4: Practice the raise keyword to raise an builtin or custom error.
+- 5: Practice all the previous concepts withing a complex system.
 
+**The Module show the power of Exceptions, that give the ability of preventing your program from crashing, and also how to create your custom exceptions with a clear specific message**

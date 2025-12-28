@@ -27,30 +27,36 @@ def check_water(tank_state: str) -> None:
         raise WaterError("Not enough water in the tank!")
 
 
-print("=== Custom Garden Errors Demo ===")
-print("")
-try:
-    print("Testing PlantError...")
-    check_plant("tomato")
-except PlantError as e:
-    print(f"Caught PlantError: {e}")
-print("")
-try:
-    print("Testing WaterError...")
-    check_water("empty")
-except WaterError as e:
-    print(f"Caught WaterError: {e}")
-print("")
-print("Testing catching all garden errors...")
-checks = [
-        (check_plant, "tomato"),
-        (check_water, "empty")
-        ]
-for function, arg in checks:
+def test_custom_errors() -> None:
+    """Run and test the custom functions"""
+    print("=== Custom Garden Errors Demo ===")
+    print("")
     try:
-        function(arg)
-    except GardenError as e:
-        print(f"Caught a garden error: {e}")
+        print("Testing PlantError...")
+        check_plant("tomato")
+    except PlantError as e:
+        print(f"Caught PlantError: {e}")
+    print("")
+    try:
+        print("Testing WaterError...")
+        check_water("empty")
+    except WaterError as e:
+        print(f"Caught WaterError: {e}")
+    print("")
+    print("Testing catching all garden errors...")
+    checks = [
+            (check_plant, "tomato"),
+            (check_water, "empty")
+            ]
+    for function, arg in checks:
+        try:
+            function(arg)
+        except GardenError as e:
+            print(f"Caught a garden error: {e}")
 
-print("")
-print("All custom error types work correctly!")
+    print("")
+    print("All custom error types work correctly!")
+
+
+test_custom_errors()
+
