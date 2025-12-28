@@ -59,4 +59,3 @@ def test_custom_errors() -> None:
 
 
 test_custom_errors()
-
