@@ -17,9 +17,18 @@ def parsing_coordinate(args: str) -> None:
         print(f'Parsing invalid coordinates: "{args}"')
         print(f"Error parsing coordinates: {e}")
         print(f'Error details - Type: ValueError, Args: ("{e}",)')
+        return
+
+    x1, y1, z1 = (0, 0, 0)
+    x2, y2, z2 = (position)
+    distance = math.sqrt(
+            (x2 - x1)**2 +
+            (y2 - y1)**2 +
+            (z2 - z1)**2
+            )
 
     print(f"Parsed position: {position}")
-    print(position)
+    print(f"Distance between {0, 0, 0} and {position}: {distance:.2f}")
 
 
 def test_coordinate_system() -> None:
@@ -39,15 +48,29 @@ def test_coordinate_system() -> None:
                 (z2 - z1)**2
                 )
         print(f"Position created: {position}")
-        print(f"Distance between (0, 0, 0) and {position}: {distance:.2f}")
+        print(
+                f"Distance between ({x1}, {y1}, {z1}) and {position}: "
+                f"{distance:.2f}"
+                )
+        print("")
+        # Parse position of multi different inputs
+        parsing_coordinate("3,4,0")
+        print("")
+        parsing_coordinate("abc,def,ghi")
+        print("")
+
+        # Demonstrate a tuple unpacking
+        print("Unpacking demonstration:")
+        position = (3, 4, 0)
+        x, y, z = position
+        print(f"Player at x={x}, y={y}, z={z}")
+        print(f"Coordinates: X={x}, Y={y}, Z={z}")
+    # Addisional, input from the commands line
+    elif sys.argv.__len__() == 2:
+        coordinate = sys.argv[1]
+        coordinate.split(',')
+        parsing_coordinate(coordinate)
 
 
-
-
-
-
-
-
+# Run the demonstration
 test_coordinate_system()
-
-#parsing_coordinate("3,4,0")
