@@ -20,7 +20,11 @@ def parsing_coordinate(args: str) -> None:
         return
 
     x1, y1, z1 = (0, 0, 0)
-    x2, y2, z2 = (position)
+    try:
+        x2, y2, z2 = position
+    except ValueError:
+        print("Error: Expected exactly 3 coordinates")
+        return
     distance = math.sqrt(
             (x2 - x1)**2 +
             (y2 - y1)**2 +
@@ -70,6 +74,9 @@ def test_coordinate_system() -> None:
         coordinate = sys.argv[1]
         coordinate.split(',')
         parsing_coordinate(coordinate)
+    else:
+        print("Error: Expected exactly 3 coordinates as one string :)")
+        return
 
 
 # Run the demonstration
