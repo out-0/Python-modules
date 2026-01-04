@@ -1,7 +1,3 @@
-
-
-At the module0 there is 7 exercises, each one aim to make you more familiar with the python syntax.
-
 ### Module00
 - 0: Simple introduction to print function.
 - 1: Introduce the input function also the converting int function which create a new object from the received one.
@@ -10,6 +6,8 @@ At the module0 there is 7 exercises, each one aim to make you more familiar with
 - 5: Using the builtin range() function.
 - 6: Practice syntax.
 - 7: More conditional.
+
+**At the module0 there is 7 exercises, each one aim to make you more familiar with the python syntax.**
 
 ### Module01
 - 0: First using of the condition if __name__ == "__main__" so strict a function to the main script.
@@ -35,3 +33,12 @@ also how to design a small system with a complex component.**
 **The Module show the power of Exceptions, that give the ability of preventing your program from crashing, and also how to create your custom exceptions with a clear specific message**
 
 ### Module03
+- 0: Discover the sys module and the sys.argv list that hold the command line arguments.
+- 1: Practice the command line arguments with some builtin functions.
+- 2: Practice unpacking and more builtin functions, math module, tuple data collection, exceptions.
+- 3: Introduction to 'set' data collection and its methods: union(), intersection(), difference().
+- 4: Introduction to 'dict' data collection and its methods: keys(), values(), items(), get(), update().
+- 5: A great new concept: 'yield', 'next', iter, and how to create generators to stream data instead of store it.
+- 6: Demonstrate List/dict/set comprehensions with a complex gaming system (not really complex).
+
+**The module focus on demonstrating a several new concepts, and some data collections, and also show the magic behind some functions like range() and the generators**
