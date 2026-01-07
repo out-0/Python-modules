@@ -1,5 +1,12 @@
 from sys import stdin, stderr, stdout
 
+"""ft_stream_management.py
+
+Handles the three sacred data channels of the Cyber Archives.
+Collects archivist ID and status reports, routes messages to stdout
+and stderr appropriately, and demonstrates proper stream separation.
+"""
+
 
 def test_stream_management() -> None:
     """Test the 3 standard files for streaming data"""
