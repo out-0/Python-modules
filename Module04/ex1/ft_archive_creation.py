@@ -23,7 +23,7 @@ def test_archive_creation() -> None:
 
     print("")
     print("Data inscription complete. Storage unit sealed.")
-    print("Archive '{storage_name}' ready for long-term preservation.")
+    print(f"Archive '{storage_name}' ready for long-term preservation.")
     # Close file
     file.close()
 
