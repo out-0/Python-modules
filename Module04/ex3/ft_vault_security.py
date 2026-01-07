@@ -5,18 +5,19 @@ def test_vault_security() -> None:
     print("=== CYBER ARCHIVES - VAULT SECURITY SYSTEM ===")
     print("")
     print("Initiating secure vault access...")
-    with open('classified_data.txt', 'r') as f:
+    with (open('classified_data.txt', 'r') as f1,
+          open('security_protocols.txt', 'r') as f2):
+
         print("Vault connection established with failsafe protocols")
         print("")
         print("SECURE EXTRACTION:")
         # Extraction data
-        data = f.read()
+        data = f1.read()
         print(data)
 
         print("")
         print("SECURE PRESERVATION:")
-        file = open('security_protocols.txt', 'r')
-        data = file.read()
+        data = f2.read()
         print(data)
 
     print("Vault automatically sealed upon completion")
