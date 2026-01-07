@@ -1,10 +1,3 @@
-"""ft_ancient_text.py
-
-Introduced the open function and how to read the data in
-the provided file.
-"""
-
-
 def test_recovery_system() -> None:
     """Structure the recovery system"""
 

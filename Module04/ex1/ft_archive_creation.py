@@ -1,11 +1,3 @@
-"""ft_archive_creation.py
-
-Discovering the open file moded, and the power
-of the 'w' mode, which can erase the already exist
-data if not used carfuly
-"""
-
-
 def test_archive_creation() -> None:
     """"""
     print("=== CYBER ARCHIVES - PRESERVATION SYSTEM ===")
