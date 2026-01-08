@@ -42,3 +42,10 @@ also how to design a small system with a complex component.**
 - 6: Demonstrate List/dict/set comprehensions with a complex gaming system (not really complex).
 
 **The module focus on demonstrating a several new concepts, and some data collections, and also show the magic behind some functions like range() and the generators**
+
+### Module04
+- 0: Introduction to open, close, read functions.
+- 1: Write method that write certain data to specific file, by its object.
+- 2: Discover the tree streams tunnels (sys.stdin, sys.stdout, sys.stderr).
+- 3: Usage of 'with' statement and how its protect the data corruption.
+- 4: Practice handling file error exceptions and protecting file data.
