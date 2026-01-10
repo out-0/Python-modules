@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Text
 
 
 # A Base abstract class
@@ -18,8 +18,9 @@ class DataProcessor(ABC):
 
     # Normal method that can be overriding later.
     def format_output(self, result: str) -> str:
-        """Regular method that will be overriding"""
-        print(f"Output: Processed {result}")
+        """Regular method with default implementation
+        return a string format that will be overriding"""
+        return f"Output: {result}"
 
 
 # Specific NumricProcessor class that override the base methods
@@ -27,13 +28,30 @@ class NumericProcessor(DataProcessor):
     """Demonstrate the processing and validation of a numeric data"""
 
     def __init__(self) -> None:
-        """"""
+        """Constructor for numeric class"""
+        self.count: int = 0
+        self.list_sum: int = 0
+        self.average: float = 0.0
         print("Initializing Numeric Processor...")
 
     # Processing an integers data
     def process(self, data: Any) -> str:
         """Process a specify list of data"""
 
+        # Processing and Calculating statistics.
+        count: int = 0
+        list_sum: int = 0
+        for item in data:
+            try:
+                list_sum += item
+                count += 1
+            except TypeError:
+                print("Error: some data is not valid")
+        # Assign the statistics
+        self.count: int = count
+        self.list_sum: int = list_sum
+        if count != 0:
+            self.average: float = list_sum / count
         return (f"Processing data: {data}")
 
     # Validate that data is integers, else raise error
@@ -43,7 +61,7 @@ class NumericProcessor(DataProcessor):
             return False
         for item in data:
             try:
-                item - 0
+                _ = item - 0
             except TypeError:
                 return False
         return True
@@ -51,7 +69,9 @@ class NumericProcessor(DataProcessor):
     # Print process result
     def format_output(self, result: str) -> str:
         """Format the result and return it."""
-        return f"Output: {result}"
+        return (f"{result} Processed {self.count} "
+                f"numeric values, sum={self.list_sum} "
+                f"avg={self.average}")
 
 
 # Specific TextProcessor class that override the base methods
@@ -60,15 +80,32 @@ class TextProcessor(DataProcessor):
 
     def __init__(self) -> None:
         """Start and Initializing the text processor"""
-
+        self.text_len: int = 0
+        self.words_count: int = 0
         print("Initializing Text Processor...")
+
+    # A helper function to calculate the words count
+    def count_word(self, text: str):
+        inside_word: int = 0
+        count: int = 0
+        for char in text:
+            if char != " ":
+                if not inside_word:
+                    count += 1
+                    inside_word: int = 1
+            else:
+                inside_word: int = 0
+        return count
 
     # Processing a and return string data
     def process(self, data: Any) -> str:
+        if data:
+            self.text_len: int = data.__len__()
+            self.words_count: int = TextProcessor.count_word(self, data)
         return (f'Processing data: "{data}"')
 
     def validate(self, data: Any) -> bool:
-        """Check if no data provider, or if data is not
+        """Check if no data provided, or if data is not
         string"""
         if data is None or data.__class__ is not str:
             return False
@@ -77,7 +114,8 @@ class TextProcessor(DataProcessor):
     def format_output(self, result: str) -> str:
         """Return a processing string"""
 
-        return f"Output: {result}"
+        return (f"{result} Processed text: {self.text_len} "
+                "characters, {self.words_count} words")
 
 
 # Specific LogProcessor class that override the base methods
@@ -135,18 +173,6 @@ def test_numeric_processor() -> None:
 def test_text_processor() -> None:
     """Demonstrating the text overriding"""
 
-    # A helper function to calculate the words count
-    def count_word(string: str):
-        inside_word: int = 0
-        count: int = 0
-        for char in string:
-            if char != " ":
-                if not inside_word:
-                    count += 1
-                    inside_word: int = 1
-            else:
-                inside_word = 0
-        return count
 
     # Create instance of text processor.
     text_proc: TextProcessor = TextProcessor()
@@ -189,7 +215,30 @@ def demonstrate_abstraction() -> None:
 
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
     print("")
-    test_numeric_processor()
+    all_process = [NumericProcessor,
+                   TextProcessor,
+                   LogProcessor]
+
+    # Numeric processor------------------------
+    num_proc = NumericProcessor()
+    num_data: list = [1, 2, 3, 4, 5]
+    print(num_proc.process(num_data))
+    if num_proc.validate(num_data):
+        print("Validation: Numeric data verified")
+        print(num_proc.format_output("Output:"))
+    else:
+        print("Validation (Error): data is invalid")
+
+    # Text processor---------------------------
+    text_proc = TextProcessor()
+    text_data: str = "Hello Nexus World"
+    print(text_proc.process(text_data))
+    if text_proc.validate(text_data):
+        print("Validation: Text data verified")
+        print(text_proc.format_output("Output:"))
+    else:
+        print("Validation (Error): data is invalid")
+
     print("")
     test_text_processor()
     print("")
