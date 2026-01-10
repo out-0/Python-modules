@@ -1,3 +1,5 @@
+### Just as quick note : you may see that in some exercises we use some no sense hardcoded code that we can just replace it with a better approach, well that correct, but just to match the authorized list
+
 ### Module00
 - 0: Simple introduction to print function.
 - 1: Introduce the input function also the converting int function which create a new object from the received one.
