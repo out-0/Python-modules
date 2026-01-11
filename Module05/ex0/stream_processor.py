@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Text
+from typing import Any, Union
 
 
 # A Base abstract class
@@ -20,10 +20,11 @@ class DataProcessor(ABC):
     def format_output(self, result: str) -> str:
         """Regular method with default implementation
         return a string format that will be overriding"""
+
         return f"Output: {result}"
 
 
-# Specific NumricProcessor class that override the base methods
+# Specific NumericProcessor class that override the base methods
 class NumericProcessor(DataProcessor):
     """Demonstrate the processing and validation of a numeric data"""
 
@@ -61,7 +62,8 @@ class NumericProcessor(DataProcessor):
             return False
         for item in data:
             try:
-                _ = item - 0
+                # Type may be int or float, just check and throw the result off
+                _: Union[int, float] = item - 0
             except TypeError:
                 return False
         return True
@@ -85,7 +87,8 @@ class TextProcessor(DataProcessor):
         print("Initializing Text Processor...")
 
     # A helper function to calculate the words count
-    def count_word(self, text: str):
+    def count_word(self, text: str) -> int:
+        """Helper function to calculate the words in a string"""
         inside_word: int = 0
         count: int = 0
         for char in text:
@@ -99,6 +102,8 @@ class TextProcessor(DataProcessor):
 
     # Processing a and return string data
     def process(self, data: Any) -> str:
+        """Overriding the base method with the text processing
+        to register the text statistics"""
         if data:
             self.text_len: int = data.__len__()
             self.words_count: int = TextProcessor.count_word(self, data)
@@ -115,7 +120,7 @@ class TextProcessor(DataProcessor):
         """Return a processing string"""
 
         return (f"{result} Processed text: {self.text_len} "
-                "characters, {self.words_count} words")
+                f"characters, {self.words_count} words")
 
 
 # Specific LogProcessor class that override the base methods
@@ -128,7 +133,7 @@ class LogProcessor(DataProcessor):
 
     def process(self, data: Any) -> str:
         """Process the log data"""
-        print(f'Processing data: "{data}"')
+        return (f'Processing data: "{data}"')
 
     def validate(self, data: Any) -> bool:
         """Validate if the log is valid string"""
@@ -137,76 +142,8 @@ class LogProcessor(DataProcessor):
         return False
 
     def format_output(self, result: str) -> str:
-        return f"Output: {result}"
-        pass
-
-
-# Demonstrate a numberic processor----------------------------------------
-def test_numeric_processor() -> None:
-    """Demonstrating the numberic overriding"""
-
-    # Create instance NumericProcessor
-    num_proc: NumericProcessor = NumericProcessor()
-    data: list = [1, 2, 3, 4, 5]
-    # Processing list
-    print(num_proc.process(data))
-    # Validate list and return result
-    if num_proc.validate(data):
-        print("Validation: Numeric data verified")
-    else:
-        print("Error: Some numeric data is incorrect")
-
-    # Calculate statistics.
-    count: int = 0
-    list_sum: int = 0
-    for item in data:
-        count += 1
-        list_sum += item
-    # Structure the result format.
-    result: str = (f"Processed "
-                   f"{count} numeric values, "
-                   f"sum={list_sum}, avg={list_sum / count}")
-    print(num_proc.format_output(result))
-
-
-# Demonstrate a text processor---------------------------------------------
-def test_text_processor() -> None:
-    """Demonstrating the text overriding"""
-
-
-    # Create instance of text processor.
-    text_proc: TextProcessor = TextProcessor()
-    # Process a text string
-    data: str = "Hello Nexus World"
-    print(text_proc.process(data))
-    # Check and print result
-    if text_proc.validate(data):
-        print("Validation: Text data verified")
-    else:
-        print("Error: String data is not valid")
-    # Print output format
-    result: str = (f"Processed text: {data.__len__()} "
-                   f"characters, {count_word(data)} words")
-    print(text_proc.format_output(result))
-
-
-# Demonstrate a log processor------------------------------------------------
-def test_log_processor() -> None:
-    """Demonstrating the log overriding"""
-
-    # Initiate an log instance
-    log_proc: LogProcessor = LogProcessor()
-    # Process a log data
-    data: str = "Connection timeout"
-    log_proc.process(data)
-    # Validate log data
-    if log_proc.validate(data):
-        print("Validation: Log entry verified")
-    else:
-        print("Error: Log entry not valid")
-    # Print output format
-    result = "[ALERT] ERROR level detected: Connection timeout"
-    print(log_proc.format_output(result))
+        """Format string that just return the string provided"""
+        return result
 
 
 # test stream processor
@@ -215,12 +152,9 @@ def demonstrate_abstraction() -> None:
 
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
     print("")
-    all_process = [NumericProcessor,
-                   TextProcessor,
-                   LogProcessor]
 
     # Numeric processor------------------------
-    num_proc = NumericProcessor()
+    num_proc: NumericProcessor = NumericProcessor()
     num_data: list = [1, 2, 3, 4, 5]
     print(num_proc.process(num_data))
     if num_proc.validate(num_data):
@@ -229,8 +163,10 @@ def demonstrate_abstraction() -> None:
     else:
         print("Validation (Error): data is invalid")
 
+    print("")
+
     # Text processor---------------------------
-    text_proc = TextProcessor()
+    text_proc: TextProcessor = TextProcessor()
     text_data: str = "Hello Nexus World"
     print(text_proc.process(text_data))
     if text_proc.validate(text_data):
@@ -240,13 +176,44 @@ def demonstrate_abstraction() -> None:
         print("Validation (Error): data is invalid")
 
     print("")
-    test_text_processor()
+
+    # Log processor-----------------------------
+    log_proc: LogProcessor = LogProcessor()
+    log_data: str = '"ERROR: Connection timeout"'
+    print(log_proc.process(log_data))
+    if log_proc.validate(log_data):
+        print("Validation: Log entry verified")
+        print(log_proc.format_output("Output: [ALERT] ERROR level detected: "
+                                     "Connection timeout"))
+    else:
+        print("Validation (Error): data is invalid")
+
     print("")
-    test_log_processor()
 
     print("=== Polymorphic Processing Demo ===")
     print("Processing multiple data types through same interface...")
 
+    # ######### Demonstrate abstraction #######################
+
+    # Register data in a tuples inside list.
+    data: list = [
+            ([2, 2, 2], "Result 1:"),
+            ("Mind Results", "Result 2:"),
+            (None, "Result 3: [INFO] INFO level detected: System ready")
+            ]
+
+    # Register all process in a tuple.
+    all_process: tuple = (num_proc, text_proc, log_proc)
+
+    i: int = 0
+    while i < 3:
+        data_test, result_format = data[i]
+        all_process[i].process(data_test)
+        print(all_process[i].format_output(result_format))
+        i += 1
+
+    print("")
+    print("Foundation systems online. Nexus ready for advanced streams.")
 
 
 demonstrate_abstraction()
