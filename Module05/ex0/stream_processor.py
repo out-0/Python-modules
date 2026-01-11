@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Union
+from typing import Any, Union, List
 
 
 # A Base abstract class
@@ -155,7 +155,7 @@ def demonstrate_abstraction() -> None:
 
     # Numeric processor------------------------
     num_proc: NumericProcessor = NumericProcessor()
-    num_data: list = [1, 2, 3, 4, 5]
+    num_data: List[int] = [1, 2, 3, 4, 5]
     print(num_proc.process(num_data))
     if num_proc.validate(num_data):
         print("Validation: Numeric data verified")
