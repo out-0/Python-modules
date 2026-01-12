@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from typing import List, Any, Dict, Union, Optional
 
 
+# Base abstract class which the parent for the
+# specialized streams below.
 class DataStream(ABC):
     """Abstract class for data streaming"""
 
@@ -30,13 +32,51 @@ class DataStream(ABC):
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         """Return a default statistics"""
 
-        return {"Data Proceded: ": self.element_count}
+        return {"Data Proceded: ": self.element_count_processed}
 
 
-
+# A Boss class that show the demonstration of polymorphism
+# with processing a minimal status about all specialized
+# classes processing.
 class StreamProcessor:
-    """"""
-    pass
+    """Structuring a minimal result
+    about sharing the same interface
+    between the specialized stream systems."""
+
+    def __init__(self, stream_systems: List[DataStream]) -> None:
+        """Initializer"""
+        self.stream_systems: List[DataStream] = stream_systems
+
+    def process_all(self, systems_data: List[List]) -> str:
+        """Process data for all systems"""
+
+        systems_count: int = systems_data.__len__()
+        stream_systems: List = self.stream_systems
+        i: int = 0
+        # Loop trough stream systems and pass the data provided
+        # to the system by its process_batch method, even if its
+        # not printed we got the element_count_processed in the system ocject.
+        while i < systems_count:
+            stream_systems[i].process_batch(systems_data[i])
+            i += 1
+
+        i: int = 0
+        # get the type of data based on its the class of sytem.
+        # for structure the formate demo.
+        while i < systems_count:
+            if isinstance(stream_systems[i], SensorStream):
+                system_type: str = "SensorStream"
+                element_count: int = stream_systems[i].element_count_processed
+                print(f"- {system_type}: {element_count} readings processed")
+            elif isinstance(stream_systems[i], TransactionStream):
+                system_type: str = "TransactionStream"
+                element_count: int = stream_systems[i].element_count_processed
+                print(f"- {system_type}: {element_count} operations processed")
+            elif isinstance(stream_systems[i], EventStream):
+                system_type: str = "EventStream"
+                element_count: int = stream_systems[i].element_count_processed
+                print(f"- {system_type}: {element_count} events processed")
+            i += 1
 
 
 # ###################Sensor stream ################################
@@ -61,14 +101,17 @@ class SensorStream(DataStream):
 
         # Count the total elements that processed
         # and override the default 0 count.
-        self.element_count_processed += data_batch.__len__()
+        self.element_count_processed: int = data_batch.__len__()
 
-        # Format manually instead of join since not authorized
-        formatted: str = "["
-        for item in data_batch:
-            for k in item:
-                formatted += f"{k}:{item[k]}, "
-        formatted: str = formatted[:-2] + "]"  # Remove last part ", "
+        try:
+            # Format manually instead of join since not authorized
+            formatted: str = "["
+            for item in data_batch:
+                for k in item:
+                    formatted += f"{k}:{item[k]}, "
+            formatted: str = formatted[:-2] + "]"  # Remove last part ", "
+        except Exception:
+            print("Error: check the data entered, offten must be dictionary.")
 
         # Extracting the temps since the most important in
         # a sensor logic, and store them so can calculate
@@ -84,7 +127,8 @@ class SensorStream(DataStream):
 
     # Overrided the default method to specify the formatting.
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
-        """Overrided version of get status"""
+        """Return stream statistic,
+        Overrided version of get status"""
         # Get the element processed
         processed_count: int = self.element_count_processed
         total_temps_count: int = self.temps_list.__len__()
@@ -126,15 +170,18 @@ class TransactionStream(DataStream):
 
         # Count the total elements that processed
         # and override the default 0 count.
-        self.element_count_processed += data_batch.__len__()
-
-        # Manually format the dictionary to show as a list
-        # format, instead of using join since not authorized
-        formatted: str = "["
-        for item in data_batch:
-            for k in item:
-                formatted += f"{k}:{item[k]}, "
-        formatted: str = formatted[:-2] + "]"  # Remove last part ", "
+        self.element_count_processed: int = data_batch.__len__()
+        # For safety if data not valid type
+        try:
+            # Manually format the dictionary to show as a list
+            # format, instead of using join since not authorized
+            formatted: str = "["
+            for item in data_batch:
+                for k in item:
+                    formatted += f"{k}:{item[k]}, "
+            formatted: str = formatted[:-2] + "]"  # Remove last part ", "
+        except Exception:
+            print("Error: check the data entered, offten must be dictionary.")
 
         # Extracting the net flow which is the result
         # from multi buying and selling operations
@@ -157,7 +204,8 @@ class TransactionStream(DataStream):
 
     # Override the default method to specify the formatting.
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
-        """Overrided version of get status"""
+        """Return stream statistic,
+        Overrided version of get status"""
 
         # Get the element processed
         data_count: int = self.element_count_processed
@@ -198,24 +246,28 @@ class EventStream(DataStream):
 
         # Count the total elements that processed
         # and override the default 0 count.
-        self.element_count_processed += data_batch.__len__()
+        self.element_count_processed: int = data_batch.__len__()
         self.errors_count: int = 0
 
-        # Manually format the dictionary to show as a list
-        # format, instead of using join since not authorized
-        # and also count errors detected for get status.
-        formatted: str = "["
-        for item in data_batch:
-            formatted += f"{item}, "
-            if item == "error":
-                self.errors_count += 1
-        formatted: str = formatted[:-2] + "]"  # Remove last part ", "
+        try:
+            # Manually format the dictionary to show as a list
+            # format, instead of using join since not authorized
+            # and also count errors detected for get status.
+            formatted: str = "["
+            for item in data_batch:
+                formatted += f"{item}, "
+                if item == "error":
+                    self.errors_count += 1
+            formatted: str = formatted[:-2] + "]"  # Remove last part ", "
+        except Exception:
+            print("Error: check the data entered, offten must be dictionary.")
 
-        return f"Processing transaction batch: {formatted}"
+            return f"Processing event batch: {formatted}"
 
     # Override the default method to specify the formatting.
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
-        """Overrided version of get status"""
+        """Return stream statistic,
+        Overrided version of get status"""
 
         # Get the element processed
         data_count: int = self.element_count_processed
@@ -223,7 +275,7 @@ class EventStream(DataStream):
 
         return {
             "Event analysis: ": f"{data_count} events, ",
-            errors_count: " error detected"
+            f"{errors_count} error detected": ""
             }
 
 
@@ -273,6 +325,23 @@ def test_data_stream() -> None:
     for key in status:
         print(f"{key}{status[key]}", end="")
     print("")
+
+    print("")
+    # ######## Dimonstrate polymorphic ##########
+    print("=== Polymorphic Stream Processing ===")
+    print("Processing mixed stream types through unified interface...")
+    print("")
+    print("Batch 1 Results:")
+    mother_processor: StreamProcessor = StreamProcessor([sensors_stream,
+                                                        transactions_stream,
+                                                        events_stream])
+    all_systems_data: List[List] = [
+        [{"temp": 20}, {"ressure": 1010}],  # Sensor data.
+        [{"buy": 50}, {"sell": 60}, {"buy": 100}, {"sell": 400}],  # trans data
+        ["login", "sudo", "logout"]  # Events data
+    ]
+    # Process and print the data processed and its type.
+    mother_processor.process_all(all_systems_data)
 
 
 test_data_stream()
