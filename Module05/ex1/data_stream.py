@@ -7,7 +7,7 @@ from typing import List, Any, Dict, Union, Optional
 class DataStream(ABC):
     """Abstract class for data streaming"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """A Constructor for storing a default batch
         data so can be used in the normal methods below
         if not overrided"""
@@ -43,40 +43,90 @@ class StreamProcessor:
     about sharing the same interface
     between the specialized stream systems."""
 
-    def __init__(self, stream_systems: List[DataStream]) -> None:
-        """Initializer"""
-        self.stream_systems: List[DataStream] = stream_systems
+    def __init__(self, stream_systems: List[Any]) -> None:
+        """Initialize StreamProcessor with a list of stream systems."""
+
+        self.stream_systems: List[Any] = stream_systems
 
     def process_all(self, systems_data: List[List]) -> str:
         """Process data for all systems"""
 
-        systems_count: int = systems_data.__len__()
+        systems_count: int = get_len(systems_data)
         stream_systems: List = self.stream_systems
         i: int = 0
         # Loop trough stream systems and pass the data provided
         # to the system by its process_batch method, even if its
-        # not printed we got the element_count_processed in the system ocject.
-        while i < systems_count:
-            stream_systems[i].process_batch(systems_data[i])
-            i += 1
+        # not printed we got the element_count_processed in the system object.
+        try:
+            while i < systems_count:
+                stream_systems[i].process_batch(systems_data[i])
+                i += 1
+        except Exception:
+            print("Error: Data and systems provided doesn't match")
+            return
 
         i: int = 0
-        # get the type of data based on its the class of sytem.
+        # get the type of data based on its the class of system.
         # for structure the formate demo.
+        formated_result: str = ""
         while i < systems_count:
             if isinstance(stream_systems[i], SensorStream):
                 system_type: str = "SensorStream"
                 element_count: int = stream_systems[i].element_count_processed
-                print(f"- {system_type}: {element_count} readings processed")
+                formated_result += (f"- {system_type}: "
+                                    f"{element_count} readings processed\n")
             elif isinstance(stream_systems[i], TransactionStream):
                 system_type: str = "TransactionStream"
                 element_count: int = stream_systems[i].element_count_processed
-                print(f"- {system_type}: {element_count} operations processed")
+                formated_result += (
+                    f"- {system_type}: {element_count} operations processed\n"
+                )
             elif isinstance(stream_systems[i], EventStream):
                 system_type: str = "EventStream"
                 element_count: int = stream_systems[i].element_count_processed
-                print(f"- {system_type}: {element_count} events processed")
+                formated_result += (
+                        f"- {system_type}: {element_count} events processed\n"
+                )
             i += 1
+        return formated_result
+
+    # A self dependence method that filter the data of the stream systems
+    # based on their filter method.
+    def filter_data(self,
+                    all_systems_data: List[List],
+                    criteria: Optional[str] = None
+                    ) -> str:
+        """Method that filter and structure the result"""
+        i: int = 0
+        all_filtered_result: List[List] = []
+        stream_systems_count: int = get_len(self.stream_systems)
+        stream_systems: List = self.stream_systems
+        while i < stream_systems_count:
+            # For each process system pass its specific data to its filter
+            # which will filter the most important piece of its data
+            # and return it as a list, store the result in a big list.
+            result: List = stream_systems[i].filter_data(all_systems_data[i])
+            all_filtered_result.append(result)
+            i += 1
+
+        # Extract result for each system.
+        try:
+            sensor_alerts: int = get_len(all_filtered_result[0])
+            large_transaction: int = get_len(all_filtered_result[1])
+            events_errors: int = get_len(all_filtered_result[2])
+        except Exception:
+            print("Error: You forget a stream system, check again.")
+
+        formated_result: str = "Filtered results: "
+
+        if sensor_alerts > 0:
+            formated_result += f"{sensor_alerts} critical sensor alerts, "
+        if large_transaction > 0:
+            formated_result += f"{large_transaction} large_transaction, "
+        if events_errors > 0:
+            formated_result += f"{events_errors} failed events, "
+
+        return formated_result[:-2]  # Remove last ugly ", "
 
 
 # ###################Sensor stream ################################
@@ -112,6 +162,9 @@ class SensorStream(DataStream):
             formatted: str = formatted[:-2] + "]"  # Remove last part ", "
         except Exception:
             print("Error: check the data entered, offten must be dictionary.")
+            # just a safety if list empty fix the formatted string.
+            if get_len(data_batch) == 0:
+                formatted = "[]"
 
         # Extracting the temps since the most important in
         # a sensor logic, and store them so can calculate
@@ -125,6 +178,24 @@ class SensorStream(DataStream):
 
         return f"Processing sensor batch: {formatted}"
 
+    # Filtered method specialized an
+    # each type even if not abstract
+    def filter_data(self,
+                    data_batch: List[Any],
+                    criteria: Optional[str] = None
+                    ) -> List[Any]:
+        """Filtering the alert sensors and store
+        them to be used later if needed."""
+        sensor_alerts_values: List = []
+        # Store values that dangerous as sensor alerts
+        # in a list and return it to match the prototype.
+        for dic in data_batch:
+            for key in dic:
+                if dic[key] < 0 or dic[key] >= 50:
+                    sensor_alerts_values.append(dic[key])
+
+        return sensor_alerts_values
+
     # Overrided the default method to specify the formatting.
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         """Return stream statistic,
@@ -137,7 +208,7 @@ class SensorStream(DataStream):
             average += temp
         try:
             # get average of the temps if multiple.
-            average: int = average / total_temps_count
+            average: float = average / total_temps_count
         except ZeroDivisionError:
             print("Error: some temps have 0 value")
 
@@ -182,6 +253,7 @@ class TransactionStream(DataStream):
             formatted: str = formatted[:-2] + "]"  # Remove last part ", "
         except Exception:
             print("Error: check the data entered, offten must be dictionary.")
+            return
 
         # Extracting the net flow which is the result
         # from multi buying and selling operations
@@ -201,6 +273,29 @@ class TransactionStream(DataStream):
         self.units: int = all_buying - all_selling
 
         return f"Processing transaction batch: {formatted}"
+
+    # Filtered method specialized an
+    # each type even if not abstrcat
+    def filter_data(self,
+                    data_batch: List[Any],
+                    criteria: Optional[str] = None
+                    ) -> List[Any]:
+        """Filtering the large transaction, lets say
+        over than 500,"""
+
+        # Store the count in a list as elements of "1"
+        # so i can later get the count just wiht .__len__()
+        # and don't break the method prototype contract.
+        large_transactions_count: List = []
+        for dic in data_batch:
+            for key in dic:
+                if dic[key] > 500:
+                    large_transactions_count.append(1)
+
+        # return a list just to match the prototype contract
+        # but in the formating filer ill just use len(list)
+        # since it just count the large transactions
+        return [large_transactions_count]
 
     # Override the default method to specify the formatting.
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
@@ -262,7 +357,23 @@ class EventStream(DataStream):
         except Exception:
             print("Error: check the data entered, offten must be dictionary.")
 
-            return f"Processing event batch: {formatted}"
+        return f"Processing event batch: {formatted}"
+
+    # Filtered method specialized an
+    # each type even if not abstrcat
+    def filter_data(self,
+                    data_batch: List[Any],
+                    criteria: Optional[str] = None
+                    ) -> List[Any]:
+        """Filtering the error evenets, and
+        store them in the list"""
+
+        errors_events: List = []
+        for event in data_batch:
+            if event == "error":
+                errors_events.append(event)
+
+        return errors_events
 
     # Override the default method to specify the formatting.
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
@@ -277,6 +388,12 @@ class EventStream(DataStream):
             "Event analysis: ": f"{data_count} events, ",
             f"{errors_count} error detected": ""
             }
+
+
+# Helper to count length
+def get_len(item: Any) -> int:
+    """Calculate the length of an object manually using dunder len."""
+    return item.__len__()
 
 
 # Main start
@@ -321,27 +438,32 @@ def test_data_stream() -> None:
     # Just a normal list as showed in demo.
     events_data: List[Any] = ["login", "error", "logout"]
     print(events_stream.process_batch(events_data))
-    status: dict = events_stream.get_stats()
+    status: Dict = events_stream.get_stats()
     for key in status:
         print(f"{key}{status[key]}", end="")
     print("")
 
     print("")
-    # ######## Dimonstrate polymorphic ##########
+    # ######## Demonstrate polymorphic ##########
     print("=== Polymorphic Stream Processing ===")
     print("Processing mixed stream types through unified interface...")
     print("")
     print("Batch 1 Results:")
-    mother_processor: StreamProcessor = StreamProcessor([sensors_stream,
-                                                        transactions_stream,
-                                                        events_stream])
+    # List object(instance) of all systems
+    all_systems: List = [sensors_stream, transactions_stream, events_stream]
+    mother_processor: StreamProcessor = StreamProcessor(all_systems)
     all_systems_data: List[List] = [
-        [{"temp": 20}, {"ressure": 1010}],  # Sensor data.
-        [{"buy": 50}, {"sell": 60}, {"buy": 100}, {"sell": 400}],  # trans data
-        ["login", "sudo", "logout"]  # Events data
+            [{"temp": -20}, {"temp": 50}],  # Sensor data.
+            [{"buy": 50}, {"sell": 60}, {"buy": 100}, {"sell": 400}],  # trans
+            ["login", "sudo", "logout"]  # Events data
     ]
     # Process and print the data processed and its type.
-    mother_processor.process_all(all_systems_data)
+    print(mother_processor.process_all(all_systems_data))
+
+    print("Stream filtering active: High-priority data only")
+    print(mother_processor.filter_data(all_systems_data))
+    print("")
+    print("All streams processed successfully. Nexus throughput optimal.")
 
 
 test_data_stream()
