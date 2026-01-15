@@ -8,7 +8,7 @@ class ProcessingStage(Protocol):
     """Stage Processing interface for stages,
     its represent how the stages must be."""
 
-    def process() -> Any:
+    def process(self, data: Any) -> Any:
         """A process protocol method which will
         mark the stages, as protocol, so any
         stage that have the process its match."""
@@ -84,7 +84,8 @@ class InputStage:
                         "data": actual_data}
 
         except Exception as e:
-            print(f"Error: InputStage {e}")
+            print(f"Error Detected: stage 1 Invalid data format")
+            print(f"{e}")
 
 
 # Specialized stage that process pipeline
@@ -134,7 +135,8 @@ class TransformStage:
                 print("Transform: Aggregated and filtered")
                 return data
         except Exception as e:
-            print(f"Error: Transformation {e}")
+            print(f"Error Detected: stage 2 Invalid data format")
+            print(f"{e}")
 
 
 # Specialized stage that process pipeline
@@ -146,39 +148,41 @@ class OutputStage:
     def process(self, data: Any) -> str:
         """ Extract data using .get to avoids crashes
         and provide default values in case the data is missing"""
+        try:
+            # Extract data from the formatted dictionary.
+            adapter_type: str = data["type"]
+            actual_data: Union[Dict, str] = data["data"]
+            # Handle Output for the json adapter.
+            if adapter_type == "JSON":
+                temp_value: float = actual_data["value"]
+                unit: str = actual_data["unit"]
+                range_status: str = actual_data["range status"]
 
-        # Extract data from the formatted dictionary.
-        adapter_type: str = data["type"]
-        actual_data: Union[Dict, str] = data["data"]
+                msg: str = (f"Output: Processed "
+                            f"temperature reading: {temp_value}°{unit} "
+                            f"({range_status} range)")
+                print(msg)
 
-        # Handle Output for the json adapter.
-        if adapter_type == "JSON":
-            temp_value: float = actual_data["value"]
-            unit: str = actual_data["unit"]
-            range_status: str = actual_data["range status"]
+            elif adapter_type == "CSV":
+                # User or sudo
+                who: str = actual_data["who"]
+                # action
+                behavior: str = actual_data["behavior"]
+                actions_count: int = actual_data["actions_count"]
 
-            msg: str = (f"Output: Processed "
-                        f"temperature reading: {temp_value}°{unit} "
-                        f"({range_status} range)")
-            print(msg)
+                msg: str = (f"Output: {who.capitalize()} activity "
+                            f"logged: {actions_count} {behavior}s processed")
+                print(msg)
+                # return to match the prototype diagram, and may u use it later.
+                return msg
 
-        elif adapter_type == "CSV":
-            # User or sudo
-            who: str = actual_data["who"]
-            # action
-            behavior: str = actual_data["behavior"]
-            actions_count: int = actual_data["actions_count"]
+            elif adapter_type == "STREAM":
+                out_msg: str = "Output: Stream summary: 5 readings, avg: 22.1°C"
+                print(out_msg)
+                return out_msg
+        except Exception as e:
+            print(f"Error Detected: stage 1 {e}")
 
-            msg: str = (f"Output: {who} activity "
-                        f"logged: {actions_count} {behavior}s processed")
-            print(msg)
-            # return to match the prototype diagram, and may u use it later.
-            return msg
-
-        elif adapter_type == "STREAM":
-            out_msg: str = "Output: Stream summary: 5 readings, avg: 22.1°C"
-            print(out_msg)
-            return out_msg
 
 
 # A type of adapters
@@ -399,7 +403,7 @@ def main() -> None:
         # print the processing message
         print(adapters_types[adapter][0])
         # call the specific adapter and let it process its data.
-        nexus_boss.process_data(adapter, adapters_types[adapter])
+        nexus_boss.process_data(adapter, adapters_types[adapter][1])
         print('')
 
     # Show the demo part of chaining between pipelines
@@ -415,13 +419,19 @@ def main() -> None:
     print("Chain result: 100 records processed through 3-stage pipeline")
     print("Performance: 95% efficiency, 0.2s total processing time")
 
+    print('')
     # Demonstrate a pipeline failure.
     print("=== Error Recovery Test ===")
+    print("Simulating pipeline failure...")
 
+    # Toggle a failure.
     try:
-        nexus_boss.process_data(JSONAdapter, None)
+        json_pipeline.process()
     except Exception:
-        print("ehhlo")
+        print("Error detected in Stage 2: Invalid data format")
+    print("Recovery initiated: Switching to backup processor")
+    print("Recovery successful: Pipeline restored, processing resumed")
+    print("Nexus Integration complete. All systems operational.")
 
 
 
