@@ -397,7 +397,7 @@ def get_len(item: Any) -> int:
 
 
 # Main start
-def test_data_stream() -> None:
+def main() -> None:
     """The main entry point to demonstrate data stream"""
 
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===")
@@ -466,4 +466,4 @@ def test_data_stream() -> None:
     print("All streams processed successfully. Nexus throughput optimal.")
 
 
-test_data_stream()
+main()
