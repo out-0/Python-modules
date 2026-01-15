@@ -144,20 +144,37 @@ class NexusManager(ProcessingPipeline):
         print(f"Pipeline capacity: {self.pipeline_capacity} streams/second")
 
     # Create a list of stages.
-    def create_stages(self, stages_class: List) -> None:
+    def create_stages(self, stages_class: List[Any]) -> None:
         """Create a multi stages with a shared interface
         from the list passed, and return the instances created."""
 
         i: int = 1
         for stage_class in stages_class:
-            print(f"stage {i} :", end="")
+            print(f"Stage {i} :", end="")
             # Append the instance created.
             self.stages.append(stage_class())
             i += 1
         return self.stages
 
-    def add_stage(self, stage_type: ProcessingStage) -> None:
+    # Add specific stage to the list of stages
+    def add_stage(self, stage_class: Any) -> None:
+        """Add specific stage to the list of stages
+
+            Take the stage class and create instance
+            of it and then add the instance to the list
+            of stages.
+        """
+        # Create stage instance.
+        stage: ProcessingStage = stage_class()
+
+        # append the stage to the list.
+        self.stages.append(stage)
+
+    def process() -> Any:
+        """"""
         pass
+
+    ######################## We stop here ################################
 
     # Create the multi staring pipelines
     def create_pipelines() -> None:
@@ -168,7 +185,6 @@ class NexusManager(ProcessingPipeline):
             OutputStage;
         """
         pass
-
 
 
 # Main staring point
@@ -184,12 +200,13 @@ def main() -> None:
     # Create the pipelines that will process the data trough.
     print("")
     print("Creating Data Processing Pipeline...")
-    stages_class: List = [InputStage, TransformStage, OutputStage]
-    nexus_boss.create_stages(stages_class)
+    stages: List = [InputStage, TransformStage, OutputStage]
+    nexus_boss.create_stages(stages)
 
-
+    print(type(InputStage))
+    print('')
     print("=== Multi-Format Data Processing ===")
-    print("")
+    print('')
     print("Processing JSON data through pipeline...")
 
 
