@@ -26,19 +26,17 @@ class ProcessingPipeline(ABC):
 
     """
 
-    def __init__(self) -> None:
-        """"""
+    def __init__(self, stages_list: List) -> None:
+        """Initialize a list of stages (input, transformation, output)"""
         # Register empty list that hold the stages.
-        self.stages: List = [Any]
+        self.stages: List[Any] = stages_list
 
-    def create_stages(self, stages_class: List) -> None:
-        """Create a multi stages with a shared interface
-        from the list passed, and return the instances created."""
-        pass
-
-    def add_stage() -> None:
+    # add stage to the list of stages.
+    def add_stage(self, stage: Any) -> None:
         """Add stage to the list of stages"""
-        pass
+
+        # append a stage instance to list of stages.
+        self.stages.append(stage)
 
     @abstractmethod
     def process(self, data: Any) -> Union[str, Any]:
@@ -48,13 +46,18 @@ class ProcessingPipeline(ABC):
 
 # Specialized stage that process pipeline
 class InputStage:
-    """"""
+    """Input stage that process the incoming data and
+    format it depend on the adapter(pipeline)"""
 
     def __init__(self) -> None:
-        print("Input validation and parsing")
+        """Initialize for input stage,
+        just notify that the input stage is created."""
+
+        print("Stage 1: Input validation and parsing")
 
     def process(self, data: Any) -> Dict:
-        """"""
+        """Process data based on the adapter(pipeline)"""
+
         # Extract actual data from the structured data.
         actual_data: Union[str, Dict] = data["payload"]
         adapter_type: str = data["type"]
@@ -84,19 +87,21 @@ class InputStage:
                         "data": actual_data}
 
         except Exception as e:
-            print(f"Error Detected: stage 1 Invalid data format")
+            print("Error Detected: stage 1 Invalid data format")
             print(f"{e}")
 
 
 # Specialized stage that process pipeline
 class TransformStage:
-    """"""
+    """Transformation data to match the required formula."""
 
     def __init__(self) -> None:
-        print("Data transformation and enrichment")
+        """Notify the creating of the transformation stage."""
+
+        print("Stage 2: Data transformation and enrichment")
 
     def process(self, data: Any) -> Dict:
-        """"""
+        """Transform and parse data based on the adapter(pipeline)."""
         try:
             # Extract the type of adapter and the actual data.
             adapter_type: str = data["type"]
@@ -135,15 +140,19 @@ class TransformStage:
                 print("Transform: Aggregated and filtered")
                 return data
         except Exception as e:
-            print(f"Error Detected: stage 2 Invalid data format")
+            print("Error Detected: stage 2 Invalid data format")
             print(f"{e}")
 
 
 # Specialized stage that process pipeline
 class OutputStage:
+    """Output stage to represent the final formula of the data
+    after getting parsed."""
+
     def __init__(self) -> None:
+        """Notify the creating of the Output stage."""
         # Matches requirement to print during creation
-        print("Output formatting and delivery")
+        print("Stage 3: Output formatting and delivery")
 
     def process(self, data: Any) -> str:
         """ Extract data using .get to avoids crashes
@@ -173,16 +182,16 @@ class OutputStage:
                 msg: str = (f"Output: {who.capitalize()} activity "
                             f"logged: {actions_count} {behavior}s processed")
                 print(msg)
-                # return to match the prototype diagram, and may u use it later.
+                # return to match the prototype diagram, and may u use it later
                 return msg
 
             elif adapter_type == "STREAM":
-                out_msg: str = "Output: Stream summary: 5 readings, avg: 22.1°C"
-                print(out_msg)
-                return out_msg
+                msg: str = "Output: Stream summary: 5 readings, avg: 22.1°C"
+                print(msg)
+                return msg
         except Exception as e:
-            print(f"Error Detected: stage 1 {e}")
-
+            print("Error Detected: stage 3 Invalid data format")
+            print(f"{e}")
 
 
 # A type of adapters
@@ -191,10 +200,10 @@ class JSONAdapter(ProcessingPipeline):
     that based on the pipeline processing base."""
 
     def __init__(self, pipeline_id: int, stages_list: List) -> None:
-        """"""
-        super().__init__()
+        """Get the stages list from the parent with super,
+        then update with pipeline id and fill the list with"""
+        super().__init__(stages_list)
         self.pipeline_id: int = pipeline_id
-        self.stages: List = stages_list
 
     # Overrited process for each specialized adapter
     def process(self, data: Any) -> Any:
@@ -204,26 +213,27 @@ class JSONAdapter(ProcessingPipeline):
 
         # structuring the data to help the stage know which data is
         # coming so it can produce a good format for it.
-        structured_data = {"type": "JSON", "payload": data}
+        structured_data: Dict = {"type": "JSON", "payload": data}
 
         # Save the data to start passing it to the next stage.
-        current_data = structured_data
+        current_data: Dict = structured_data
         # We loop through the stages we inherited from ProcessingPipeline
         for stage in self.stages:
             # Each stage returns the data for the next stage
-            current_data = stage.process(current_data)
+            current_data: Union[str, Dict] = stage.process(current_data)
         return current_data
 
 
 # A type of adapters
 class CSVAdapter(ProcessingPipeline):
-    """"""
+    """CSV adapter that process the data logs with a formatted structure."""
 
     def __init__(self, pipeline_id: int, stages_list: List) -> None:
-        """"""
-        super().__init__()
-        self.pipeline_id = pipeline_id
-        self.stages: List = stages_list
+        """Initialize the adapter with the provided list
+        of stages. and add the pipeline id."""
+
+        super().__init__(stages_list)
+        self.pipeline_id: int = pipeline_id
 
     # Overrited process for each specialized adapter
     def process(self, data: Any) -> Any:
@@ -233,27 +243,29 @@ class CSVAdapter(ProcessingPipeline):
 
         # structuring the data to help the stage know which data is
         # coming so it can produce a good format for it.
-        structured_data = {"type": "CSV", "payload": data}
+        structured_data: Dict = {"type": "CSV", "payload": data}
 
         # Save the data to start passing it to the next stage.
-        current_data = structured_data
+        current_data: Dict = structured_data
 
         # We loop through the stages we inherited from ProcessingPipeline
         for stage in self.stages:
             # Each stage returns the data for the next stage
-            current_data = stage.process(current_data)
+            current_data: Union[str, Dict] = stage.process(current_data)
         return current_data
 
 
 # A type of adapters
 class StreamAdapter(ProcessingPipeline):
-    """"""
+    """Adapter that process the real time stream of data
+    and output it as a formatted structure."""
 
     def __init__(self, pipeline_id: int, stages_list: List) -> None:
-        """"""
-        super().__init__()
-        self.pipeline_id = pipeline_id
-        self.stages: List = stages_list
+        """Initialize the adapter with the provided list
+        of stages. and add the pipeline id."""
+
+        super().__init__(stages_list)
+        self.pipeline_id: int = pipeline_id
 
     # Overrited process for each specialized adapter
     def process(self, data: Any) -> Any:
@@ -271,7 +283,7 @@ class StreamAdapter(ProcessingPipeline):
         # We loop through the stages we inherited from ProcessingPipeline
         for stage in self.stages:
             # Each stage returns the data for the next stage
-            current_data = stage.process(current_data)
+            current_data: Union[str, Dict] = stage.process(current_data)
         return current_data
 
 
@@ -296,33 +308,7 @@ class NexusManager:
         if self.pipeline_list.__len__() < 1000:
             self.pipeline_list.append(pipeline)
         else:
-            print("Error: the list is full.")
-
-    # Create a list of stages.
-    def create_stages(self, stages_class: List[Any]) -> None:
-        """Creates instances of stages and returns them as a list"""
-        i: int = 1
-        created_stages: List = []
-        for stage_class in stages_class:
-            print(f"Stage {i} :", end="")
-            # Append the instance created.
-            created_stages.append(stage_class())
-            i += 1
-        return created_stages
-
-    # Add specific stage to the list of stages
-    def add_stage(self, stage_class: Any) -> None:
-        """Add specific stage to the list of stages
-
-            Take the stage class and create instance
-            of it and then add the instance to the list
-            of stages.
-        """
-        # Create stage instance.
-        stage: ProcessingStage = stage_class()
-
-        # append the stage to the list.
-        self.stages.append(stage)
+            print("Error: the pipeline list is full.")
 
     # Process data for a specific pipeline(adapter)
     def process_data(self,
@@ -360,10 +346,8 @@ def main() -> None:
     # Create the pipelines that will process the data trough.
     print("")
     print("Creating Data Processing Pipeline...")
-    stages: List = [InputStage, TransformStage, OutputStage]
-    # create the stages and take the list to pass it later to
-    # the adapters.
-    stages_list: List = nexus_boss.create_stages(stages)
+    # Create a list of stages that will be passed to each adapter.
+    stages_list: List = [InputStage(), TransformStage(), OutputStage()]
 
     print('')
     print("=== Multi-Format Data Processing ===")
@@ -431,8 +415,9 @@ def main() -> None:
         print("Error detected in Stage 2: Invalid data format")
     print("Recovery initiated: Switching to backup processor")
     print("Recovery successful: Pipeline restored, processing resumed")
-    print("Nexus Integration complete. All systems operational.")
 
+    print('')
+    print("Nexus Integration complete. All systems operational.")
 
 
 # Run the main point.
