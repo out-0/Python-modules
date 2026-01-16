@@ -51,3 +51,12 @@ also how to design a small system with a complex component.**
 - 2: Discover the tree streams tunnels (sys.stdin, sys.stdout, sys.stderr).
 - 3: Usage of 'with' statement and how its protect the data corruption.
 - 4: Practice handling file error exceptions and protecting file data.
+
+**The module was a extending of the C knowledge of file handling, opening, reading, writing..., of course with a sugar simplicity which make work with the concept much easier alternative to C**
+
+### Module05
+- 0: Introduction of Polymorphism concepts applicable by the abstract way in python by accessing (ABC, abstractmethod), and building an shared interface with different behaviors.
+- 1: Practice more abstraction with a little complex scenario.
+- 2: Mastering the abstraction and Polymorphism, also additional to Protocol idea, and mix all that with a complex system.
+
+**The Module was great that discover that fantastic concept of the Polymorphism, and help for soliding the fundamental concepts with a complex systems.**
