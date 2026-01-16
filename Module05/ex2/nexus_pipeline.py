@@ -26,11 +26,12 @@ class ProcessingPipeline(ABC):
 
     """
 
-    def __init__(self, stages_list: List) -> None:
+    def __init__(self) -> None:
         """Initialize a list of stages (input, transformation, output)"""
         # Register empty list that hold the stages.
-        self.stages: List[Any] = stages_list
+        self.stages: List[Any] = []
 
+    @abstractmethod
     # add stage to the list of stages.
     def add_stage(self, stage: Any) -> None:
         """Add stage to the list of stages"""
@@ -199,11 +200,11 @@ class JSONAdapter(ProcessingPipeline):
     """Adapter for json data,
     that based on the pipeline processing base."""
 
-    def __init__(self, pipeline_id: int, stages_list: List) -> None:
+    def __init__(self, pipeline_id: str) -> None:
         """Get the stages list from the parent with super,
         then update with pipeline id and fill the list with"""
-        super().__init__(stages_list)
-        self.pipeline_id: int = pipeline_id
+        super().__init__()
+        self.pipeline_id: str = pipeline_id
 
     # Overrited process for each specialized adapter
     def process(self, data: Any) -> Any:
@@ -223,17 +224,24 @@ class JSONAdapter(ProcessingPipeline):
             current_data: Union[str, Dict] = stage.process(current_data)
         return current_data
 
+    # Append to the list of stages.
+    def add_stage(self, stage: Any) -> None:
+        """Add the stage to the list of stages
+        that inherited from parent"""
+
+        self.stages.append(stage)
+
 
 # A type of adapters
 class CSVAdapter(ProcessingPipeline):
     """CSV adapter that process the data logs with a formatted structure."""
 
-    def __init__(self, pipeline_id: int, stages_list: List) -> None:
-        """Initialize the adapter with the provided list
+    def __init__(self, pipeline_id: str) -> None:
+        """Initialize the adapter with the list
         of stages. and add the pipeline id."""
 
-        super().__init__(stages_list)
-        self.pipeline_id: int = pipeline_id
+        super().__init__()
+        self.pipeline_id: str = pipeline_id
 
     # Overrited process for each specialized adapter
     def process(self, data: Any) -> Any:
@@ -254,18 +262,25 @@ class CSVAdapter(ProcessingPipeline):
             current_data: Union[str, Dict] = stage.process(current_data)
         return current_data
 
+    # Append to the list of stages.
+    def add_stage(self, stage: Any) -> None:
+        """Add the stage to the list of stages
+        that inherited from parent"""
+
+        self.stages.append(stage)
+
 
 # A type of adapters
 class StreamAdapter(ProcessingPipeline):
     """Adapter that process the real time stream of data
     and output it as a formatted structure."""
 
-    def __init__(self, pipeline_id: int, stages_list: List) -> None:
-        """Initialize the adapter with the provided list
+    def __init__(self, pipeline_id: str) -> None:
+        """Initialize the adapter with the list
         of stages. and add the pipeline id."""
 
-        super().__init__(stages_list)
-        self.pipeline_id: int = pipeline_id
+        super().__init__()
+        self.pipeline_id: str = pipeline_id
 
     # Overrited process for each specialized adapter
     def process(self, data: Any) -> Any:
@@ -285,6 +300,13 @@ class StreamAdapter(ProcessingPipeline):
             # Each stage returns the data for the next stage
             current_data: Union[str, Dict] = stage.process(current_data)
         return current_data
+
+    # Append to the list of stages.
+    def add_stage(self, stage: Any) -> None:
+        """Add the stage to the list of stages
+        that inherited from parent"""
+
+        self.stages.append(stage)
 
 
 class NexusManager:
@@ -355,9 +377,15 @@ def main() -> None:
     # Create the adapters pipeline and add it to the manager
     # list of pipelines, also pass the stages list to it so it
     # can initialized by it, to use them for processing data.
-    json_pipeline: JSONAdapter = JSONAdapter(1, stages_list)
-    csv_pipeline: CSVAdapter = CSVAdapter(2, stages_list)
-    stream_pipeline: StreamAdapter = StreamAdapter(3, stages_list)
+    json_pipeline: JSONAdapter = JSONAdapter("JSON_001")
+    csv_pipeline: CSVAdapter = CSVAdapter("CSV_001")
+    stream_pipeline: StreamAdapter = StreamAdapter("STREAM_001")
+
+    # Add the stages to the each adapter.
+    for stage in stages_list:
+        for adapter in [json_pipeline, csv_pipeline, stream_pipeline]:
+            adapter.add_stage(stage)
+
 
     # add ...
     nexus_boss.add_pipeline(json_pipeline)
