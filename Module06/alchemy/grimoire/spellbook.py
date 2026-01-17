@@ -6,7 +6,7 @@ def record_spell(spell_name: str, ingredients: str) -> str:
         # Use late(lazy) import to import in the function call.
         from .validator import validate_ingredients
     except Exception:
-        return "Error Detected: Lazy importing falied"
+        return "Error Detected: Lazy importing failed"
 
     validation_result: str = validate_ingredients(ingredients)
 
