@@ -348,7 +348,7 @@ class NexusManager:
                     pipe.process(adapter_data)
                     return
                 except Exception as e:
-                    print(f"Erro processing: {e}")
+                    print(f"Error processing: {e}")
                     return
 
         # if the loop finishes without returning, means we never found the type
@@ -385,7 +385,6 @@ def main() -> None:
     for stage in stages_list:
         for adapter in [json_pipeline, csv_pipeline, stream_pipeline]:
             adapter.add_stage(stage)
-
 
     # add ...
     nexus_boss.add_pipeline(json_pipeline)
