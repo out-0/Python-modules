@@ -60,3 +60,11 @@ also how to design a small system with a complex component.**
 - 2: Mastering the abstraction and Polymorphism, also additional to Protocol idea, and mix all that with a complex system.
 
 **The Module was great that discover that fantastic concept of the Polymorphism, and help for soliding the fundamental concepts with a complex systems.**
+
+### Module06
+- P1: Introduction to the power of packages, and discover the __init__, which the main initializer for a package.
+- P2: Discover different pattern of importing.
+- P3: The key difference between "Absolute paths" and "Relative paths"
+- P4: Take a look of the problem of circular dependencies and try a methods to breaking the circular curse.
+
+**The Module was a quick overview of the packages and the importing concepts in python which is essential for most python projects.**
