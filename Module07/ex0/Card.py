@@ -1,4 +1,4 @@
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
 
 
 class Card(ABC):
@@ -16,11 +16,10 @@ class Card(ABC):
         self.cost: int = cost
         self.rarity: str = rarity
 
-    @abstractclassmethod
+    @abstractmethod
     def play(self, game_state: dict) -> dict:
         """Abstract play method which must be overrided
         when inherited"""
-
         pass
 
     # Concrete method have a default implementation.
@@ -36,9 +35,6 @@ class Card(ABC):
                 'name': self.name,
                 'cost': self.cost,
                 'rarity': self.rarity,
-                'type': self.type,
-                'attack': self.attack,
-                'health': self.health
                 }
 
     # Concrete method have a default implementation.
