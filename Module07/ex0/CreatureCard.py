@@ -2,6 +2,7 @@ from ex0.Card import Card
 from typing import Dict
 
 
+# Creature Card who can summon to a battlefield.
 class CreatureCard(Card):
     """Creature card representation which is a card of a creature can attack
     defense, and have a several effects.
@@ -38,7 +39,16 @@ class CreatureCard(Card):
 
     # Implements the abstract play method
     def play(self, game_state: dict) -> dict:
-        """Specify the play method for Creature card"""
+        """Specify the play method for Creature card
+
+        - Check the game state:
+          if the Card is playable,
+          if available mana can hold cost of Card,
+
+        If all good: Add the Creature Card to the battlefield
+        and return play result.
+
+        """
 
         try:
             # Subtract the cost of the card from the available mana
@@ -55,6 +65,7 @@ class CreatureCard(Card):
                 'mana_used': self.cost,
                 'effect': 'Creature summoned to battlefield'}
 
+    # Return information of a card.
     def get_card_info(self) -> dict:
         """Return information about the Creature Card.
 
@@ -73,6 +84,7 @@ class CreatureCard(Card):
         })
         return info
 
+    # Attack action for Creature Card.
     def attack_target(self, target) -> dict:
         """Attack a specific target and damage it.
 
@@ -105,7 +117,6 @@ class CreatureCard(Card):
                 pass
         except Exception:
             print("Target not a Creature Card, you can't attcak it 💥")
-
 
         # Fill the battle information
         # The Creature Card(self) is attcking the target
