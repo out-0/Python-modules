@@ -28,7 +28,19 @@ class Deck:
         also to the general list.
         """
 
-        pass
+        # List the specialized types of cards to check
+        # the type of card against them.
+        #current_speciel_types: List[Card] = [CreatureCard,
+                                             #SpellCard,
+                                             #ArtifactCard]
+
+        if card.__class__ == CreatureCard:
+            self.creatures.append(card)
+        if card.__class__ == SpellCard:
+            self.spells.append(card)
+        if card.__class__ == ArtifactCard:
+            self.artifacts.append(card)
+
 
     def remove_card(self, card_name: str) -> bool:
         """"""
@@ -49,7 +61,10 @@ class Deck:
         for card in self.all_cards:
             all_costs += card.cost
 
-        average: float = all_costs / len(self.all_cards)
+        try:
+            average: float = all_costs / len(self.all_cards)
+        except ZeroDivisionError:
+            print("Error: Something wrong with your cards costs...")
 
         # round(3.333…) → 4 (nearest integer)
         # the second part is for after decimal places
