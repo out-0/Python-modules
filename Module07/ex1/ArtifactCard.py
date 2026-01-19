@@ -9,6 +9,9 @@ class ArtifactCard(Card):
     card removed or destroyed after cost it.
     """
 
+    # List of the current active artifacts
+    active_artifacts: list = []
+
     def __init__(self,
                  name: str,
                  cost: int,
@@ -32,9 +35,45 @@ class ArtifactCard(Card):
         self.effect: str = effect
 
     def play(self, game_state: dict) -> dict:
-        """"""
-        pass
+        """Playing artifact card after checking if playable
+        and the current game_state
+
+        is playable -> True, its mark as playable in the game.
+        available mana -> manually safe check there is enough mana.
+        durability check -> check if hit the usage limit.
+
+        """
+
+        if not game_state['is_playable']:
+            print("This Card is not playable ❌️, offten bot enough mana.")
+            return {}
+
+        if game_state['available_mana'] < self.cost:
+            print("MANA: too low mana, check playable state again❕️")
+            return {}
+
+        if self.durabiliry == 0:
+            print("DURABILITY is 0: Your Card is destroyed ☠️")
+            return {}
+
+        # If all good lets play it and activate it
+        # no need for the return dict also reduce durability.
+        ArtifactCard.activate_ability(self)
+        self.durabiliry -= 1
+        game_state['available_mana'] -= self.cost
+
+        return {'card_played': self.name,
+                'mana_used': self.cost,
+                'effect': self.effect}
 
     def activate_ability(self) -> dict:
-        """"""
-        pass
+        """
+        Activate the card effects, and return
+        dictionary of them.
+        """
+
+        # Adding the card to activate list and return effect.
+        ArtifactCard.active_artifacts.append(self)
+        return {
+            'applying': self.effect
+        }

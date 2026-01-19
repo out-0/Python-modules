@@ -3,7 +3,7 @@ from ex1.ArtifactCard import ArtifactCard
 from ex0.CreatureCard import CreatureCard, Card
 from ex1.Deck import Deck
 from enum import Enum
-from typing import List, Type
+from typing import List, Dict
 
 
 # Main starting function.
@@ -60,14 +60,14 @@ def main() -> None:
     # ----------Add the cards created to the deck
 
     # list the current created cards and loop on them to add to deck.
-    current_cards: List[Card] = [lightning_bolt, mana_crystal, fire_dragon]
+    current_cards: List[Card] = [fire_dragon, mana_crystal, lightning_bolt]
 
     costs = 0
     for card in current_cards:
         deck.add_card(card)
         costs += card.cost
 
-    # Print deck stats...
+    # ----------Print deck stats...
     print(f"Deck stats: {deck.get_deck_stats()}")
 
     # Start drawing card from deck and playing.
@@ -79,11 +79,28 @@ def main() -> None:
     # without using shuffle.
     print("\nDrawing and playing cards:\n")
 
-    card_drawed: Card = deck.draw_card()
-    card_name: str = card_drawed.name
-    card_type: Type[Card] = type(card_drawed)
-    print(f"Drew: {card_name} ({card_type})")
-    print(f"Play result: {card_drawed.play()}")
+    drawing_rounds: int = 3
+    i: int = 0
+    available_mana: int = 15
+    game_state: Dict = {}
+    while i < drawing_rounds:
+        card_drawed: Card = deck.draw_card()
+        card_name: str = card_drawed.name
+        card_type: str = card_drawed.__class__.__name__
+
+        # [:-4] to remove the 'Card' word from the SpellCard to match demo.
+        print(f"Drew: {card_name} ({card_type[:-4]})")
+
+        # Playing the drawed cards
+        is_playable: bool = card_drawed.is_playable(available_mana)
+        game_state: Dict = {
+            'is_playable': is_playable,
+            'available_mana': available_mana
+        }
+        print(f"Play result: {card_drawed.play(game_state)}\n")
+
+        available_mana: int = game_state['available_mana']
+        i += 1
 
 
 main()

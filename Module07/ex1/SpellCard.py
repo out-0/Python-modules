@@ -35,6 +35,11 @@ class SpellCard(Card):
     def play(self, game_state: dict) -> dict:
         """Return playing stats
 
+        Checks:
+
+        - Check if playable.
+        - Check actual state game available mana.
+
         return dictionary hold:
 
         - Spell name
@@ -42,6 +47,18 @@ class SpellCard(Card):
         - Effect that applied by that Spell
 
         """
+
+        if not game_state['is_playable']:
+            print("This Card is not playable ❌️, offten not enough mana.")
+            return {}
+
+        if game_state['available_mana'] < self.cost:
+            print("MANA: too low mana, check playable state again❕️")
+            return {}
+
+        # If all good lets play it
+        game_state['available_mana'] -= self.cost
+
         return {'card_played': self.name,
                 'mana_used': self.cost,
                 'effect': self.effect_type}
