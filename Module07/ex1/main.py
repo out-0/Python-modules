@@ -3,7 +3,7 @@ from ex1.ArtifactCard import ArtifactCard
 from ex0.CreatureCard import CreatureCard, Card
 from ex1.Deck import Deck
 from enum import Enum
-from typing import List
+from typing import List, Type
 
 
 # Main starting function.
@@ -14,9 +14,9 @@ def main() -> None:
     class CardType(Enum):
         """Different cards type can be used during game"""
 
-        CREATURE: str = "creature"
-        SPELL: str = "spell"
-        ARTIFACT: str = "artifact"
+        CREATURE = CreatureCard
+        SPELL = SpellCard
+        ARTIFACT = ArtifactCard
 
     # ----------Enumerate rarity categories.
     class Rarity(Enum):
@@ -34,26 +34,28 @@ def main() -> None:
     # Create the Deck (the Cards manager 🔍️)
     deck: Deck = Deck()
 
-    # ------------Create 3 different Cards type.
+    # ------------Create 3 different Cards type using there constant enum.
 
     # Spell card.
-    lightning_bolt: SpellCard = SpellCard("Lightning Bolt",
-                                          3,
-                                          Rarity.COMMON.value,
-                                          "Deal 3 damage to target")
+    lightning_bolt: SpellCard = CardType.SPELL.value("Lightning Bolt",
+                                                     3,
+                                                     Rarity.COMMON.value,
+                                                     "Deal 3 damage to target")
 
     # Artifact card.
-    mana_crystal: ArtifactCard = ArtifactCard("Mana Crystal",
-                                              2,
-                                              Rarity.RARE.value,
-                                              4,
-                                              "Permanent: +1 mana per turn")
+    mana_crystal: ArtifactCard = CardType.ARTIFACT.value(
+                                "Mana Crystal",
+                                2,
+                                Rarity.RARE.value,
+                                4,
+                                "Permanent: +1 mana per turn")
+
     # Creature card
-    fire_dragon: CreatureCard = CreatureCard("Fire Dragon",
-                                             5,
-                                             Rarity.LEGENDARY.value,
-                                             7,
-                                             5)
+    fire_dragon: CreatureCard = CardType.CREATURE.value("Fire Dragon",
+                                                        5,
+                                                        Rarity.LEGENDARY.value,
+                                                        7,
+                                                        5)
 
     # ----------Add the cards created to the deck
 
@@ -69,7 +71,19 @@ def main() -> None:
     print(f"Deck stats: {deck.get_deck_stats()}")
 
     # Start drawing card from deck and playing.
+    # Since Deck has shuffle method so logically its
+    # must shuffle before each draw since the draw is
+    # must be randomly, but to match the assignment demo
+    # we'll relay on the order of adding the cards to
+    # deck so the draw will be ordered as the demo demonstrate
+    # without using shuffle.
     print("\nDrawing and playing cards:\n")
+
+    card_drawed: Card = deck.draw_card()
+    card_name: str = card_drawed.name
+    card_type: Type[Card] = type(card_drawed)
+    print(f"Drew: {card_name} ({card_type})")
+    print(f"Play result: {card_drawed.play()}")
 
 
 main()
