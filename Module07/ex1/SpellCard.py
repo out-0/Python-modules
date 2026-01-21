@@ -40,7 +40,7 @@ class SpellCard(Card):
         - Check if playable.
         - Check actual state game available mana.
 
-        return dictionary hold:
+        Return dictionary hold:
 
         - Spell name
         - Mana Cost of that Spell
@@ -49,7 +49,7 @@ class SpellCard(Card):
         """
 
         if not game_state['is_playable']:
-            print("This Card is not playable ❌️, offten not enough mana.")
+            print("This Card is not playable ❌️, often not enough mana.")
             return {}
 
         if game_state['available_mana'] < self.cost:

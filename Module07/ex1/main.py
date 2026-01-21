@@ -6,25 +6,27 @@ from enum import Enum
 from typing import List, Dict
 
 
+# ----------Create Cards types Enum
+class CardType(Enum):
+    """Different cards type can be used during game"""
+
+    CREATURE = CreatureCard
+    SPELL = SpellCard
+    ARTIFACT = ArtifactCard
+
+
+# ----------Enumerate rarity categories.
+class Rarity(Enum):
+    """List a several rarity categories"""
+
+    COMMON = "Common"
+    RARE = "Rare"
+    LEGENDARY = "Legendary"
+
+
 # Main starting function.
 def main() -> None:
     """Main entry point of script"""
-
-    # ----------Create Cards types Enum
-    class CardType(Enum):
-        """Different cards type can be used during game"""
-
-        CREATURE = CreatureCard
-        SPELL = SpellCard
-        ARTIFACT = ArtifactCard
-
-    # ----------Enumerate rarity categories.
-    class Rarity(Enum):
-        """List a several rarity categories"""
-
-        COMMON = "Common"
-        RARE = "Rare"
-        LEGENDARY = "Legendary"
 
     # ----------Demonstrate deck builder.
     print("\n=== DataDeck Deck Builder ===\n")
@@ -70,6 +72,7 @@ def main() -> None:
     # ----------Print deck stats...
     print(f"Deck stats: {deck.get_deck_stats()}")
 
+    # ----------Start drawing cards and play them
     # Start drawing card from deck and playing.
     # Since Deck has shuffle method so logically its
     # must shuffle before each draw since the draw is
@@ -83,7 +86,10 @@ def main() -> None:
     i: int = 0
     available_mana: int = 15
     game_state: Dict = {}
+    battlefield: List = []
+
     while i < drawing_rounds:
+        # deck.shuffle()
         card_drawed: Card = deck.draw_card()
         card_name: str = card_drawed.name
         card_type: str = card_drawed.__class__.__name__
@@ -95,12 +101,15 @@ def main() -> None:
         is_playable: bool = card_drawed.is_playable(available_mana)
         game_state: Dict = {
             'is_playable': is_playable,
-            'available_mana': available_mana
+            'available_mana': available_mana,
+            'battlefield': battlefield
         }
         print(f"Play result: {card_drawed.play(game_state)}\n")
 
         available_mana: int = game_state['available_mana']
         i += 1
+
+    print("Polymorphism in action: Same interface, different card behaviors!")
 
 
 main()

@@ -44,17 +44,21 @@ class ArtifactCard(Card):
 
         """
 
-        if not game_state['is_playable']:
-            print("This Card is not playable ❌️, offten bot enough mana.")
-            return {}
+        try:
 
-        if game_state['available_mana'] < self.cost:
-            print("MANA: too low mana, check playable state again❕️")
-            return {}
+            if not game_state['is_playable']:
+                print("This Card is not playable ❌️, often bot enough mana.")
+                return {}
 
-        if self.durabiliry == 0:
-            print("DURABILITY is 0: Your Card is destroyed ☠️")
-            return {}
+            if game_state['available_mana'] < self.cost:
+                print("MANA: too low mana, check playable state again❕️")
+                return {}
+
+            if self.durabiliry == 0:
+                print("DURABILITY is 0: Your Card is destroyed ☠️")
+                return {}
+        except Exception:
+            print("Error detected 💣️: Accessing some stats fail")
 
         # If all good lets play it and activate it
         # no need for the return dict also reduce durability.

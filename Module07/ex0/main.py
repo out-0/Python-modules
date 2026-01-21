@@ -1,5 +1,5 @@
 from ex0.CreatureCard import CreatureCard
-from typing import Dict, List
+from typing import Dict
 from enum import Enum
 
 
@@ -34,14 +34,12 @@ def main() -> None:
     is_playable: bool = fire_dragon.is_playable(available_mana)
     print(f"Playable: {is_playable}")
 
-    # A battlefield list that hold all the Hero's or Creatures in game.
-    battlefield: List = []
-
     # Pass the current game state and print the returned
     # result of playing this Card.
-    play_dragon: Dict = fire_dragon.play({'is playable': is_playable,
-                                          'available mana': available_mana,
-                                          'battlefield': battlefield})
+    game_state: Dict = {'is_playable': is_playable,
+                        'available_mana': available_mana}
+    play_dragon: Dict = fire_dragon.play(game_state)
+
     print(f"Play result: {play_dragon}")
 
     # First, Creating the goblin warrior.
@@ -58,7 +56,8 @@ def main() -> None:
 
     # Try an insufficient mana, which can't summon a CreatureCard like
     # fire dragon who cost 5 mana.
-    available_mana: int = 3
+    # Updating mana from the game state
+    available_mana: int = game_state['available_mana']
     print(f"\nTesting insufficient mana ({available_mana} available):")
     is_playable: bool = fire_dragon.is_playable(available_mana)
     print(f"Playable: {is_playable}")

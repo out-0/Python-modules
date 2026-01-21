@@ -1,21 +1,16 @@
 from ex0.Card import Card
-from typing import Dict
+from ex2.Combatable import Combatable
+from ex2.Magical import Magical
+from typeing import Dict
 
 
-# Creature Card who can summon to a battlefield.
-class CreatureCard(Card):
-    """Creature card representation which is a card of a creature can attack
-    defense, and have a several effects.
-    """
+class EliteCard(Card, Combatable, Magical):
+    """Super Power card type, that should have
+    all the ability from its parent, and implement
+    its behavior for all the interfaces."""
 
-    def __init__(self,
-                 name: str,
-                 cost: int,
-                 rarity: str,
-                 attack: int,
-                 health: int
-                 ) -> None:
-        """Initialize the creature card after getting the base attributes from
+    def __init__(self, name, cost, rarity, attack, health):
+        """Initialize the Elite Card after getting the base attributes from
         the base Card, and then add some functional attributes.
 
         Base stats:
@@ -30,12 +25,11 @@ class CreatureCard(Card):
         """
 
         super().__init__(name, cost, rarity)
-        self.attack: int = attack
         self.health: int = health
+        self.attack: int = attack
 
-    # Implements the abstract play method
     def play(self, game_state: dict) -> dict:
-        """Specify the play method for Creature Card
+        """Specify the play method for Elite Card
 
         - Check the game state:
           if the Card is playable,
@@ -65,29 +59,9 @@ class CreatureCard(Card):
 
         return {'card_played': self.name,
                 'mana_used': self.cost,
-                'effect': 'Creature summoned to battlefield'}
+                'effect': 'Super Elite summoned to battlefield'}
 
-    # Return information of a card.
-    def get_card_info(self) -> dict:
-        """Return information about the Creature Card.
-
-        return -> dict (dictionary of info)
-
-        """
-
-        # Get base info from parent.
-        info: Dict = super().get_card_info()
-
-        # Add specific info of Creature Card.
-        info.update({
-            'type': 'Creature',
-            'attack': self.attack,
-            'health': self.health
-        })
-        return info
-
-    # Attack action for Creature Card.
-    def attack_target(self, target) -> dict:
+    def attack(self, target):
         """Attack a specific target and damage it.
 
         Validates that attack and health are positive integers
@@ -111,7 +85,7 @@ class CreatureCard(Card):
 
         # Phase 1 check.
         if self.attack <= 0 and self.health <= 0:
-            print("Your Creature Card is already Dead 💀")
+            print("Your Elite Card is already Dead 💀")
             return {}
         # Phase 2 check.
         try:
@@ -119,7 +93,7 @@ class CreatureCard(Card):
             if target.attack and target.health:
                 pass
         except Exception:
-            print("Target not a Creature Card, you can't attack it 💥")
+            print("Target not a Elite Card, you can't attack it 💥")
 
         # Fill the battle information
         # The Creature Card(self) is attacking the target
@@ -129,3 +103,34 @@ class CreatureCard(Card):
                         'damage_dealt': self.attack,
                         'combat_resolved': True}
         return result
+
+    def defend(self, incoming_damage: int):
+        """"""
+        pass
+
+    def get_combat_stats(self):
+        """"""
+        pass
+
+
+
+    def cast_spell(self, spell_name: str, targets: list):
+        """"""
+
+        pass
+
+
+
+    def channel_mana(self, amount: int):
+        """"""
+
+        pass
+
+
+    def get_magic_stats(self):
+        """"""
+        pass
+
+
+
+print(EliteCard.mro())
