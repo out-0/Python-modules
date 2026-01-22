@@ -1,5 +1,5 @@
 from ex0.CreatureCard import CreatureCard
-from typing import Dict
+from typing import Dict, List
 from enum import Enum
 
 
@@ -7,6 +7,8 @@ def main() -> None:
     """Main starting point to run"""
 
     print("\n=== DataDeck Card Foundation ===\n")
+
+    battlefield: List = []
     print("Testing Abstract Base Class Design:\n")
 
     # Demonstrate the enumeration by a simple rarity category.
@@ -18,11 +20,8 @@ def main() -> None:
         LEGENDARY = "Legendary"
 
     # Create dragon which a Creature card[Name, cost, rarity, attack, health]
-    fire_dragon: CreatureCard = CreatureCard("Fire Dragon",
-                                             5,
-                                             Rarity.LEGENDARY.value,
-                                             7,
-                                             5)
+    fire_dragon: CreatureCard = CreatureCard("Fire Dragon", 5,
+                                             Rarity.LEGENDARY.value, 7, 5)
 
     print("CreatureCard Info:")
     print(fire_dragon.get_card_info())
@@ -36,18 +35,29 @@ def main() -> None:
 
     # Pass the current game state and print the returned
     # result of playing this Card.
-    game_state: Dict = {'is_playable': is_playable,
-                        'available_mana': available_mana}
+    game_state: Dict = {
+                        'is_playable': is_playable,
+                        'available_mana': available_mana,
+                        'battlefield': battlefield
+                        }
+
     play_dragon: Dict = fire_dragon.play(game_state)
 
     print(f"Play result: {play_dragon}")
 
-    # First, Creating the goblin warrior.
-    goblin_warrior: CreatureCard = CreatureCard("Goblin Warrior",
-                                                2,
-                                                Rarity.COMMON.value,
-                                                3,
-                                                2)
+    # First, Creating the goblin warrior and play it.
+    goblin_warrior: CreatureCard = CreatureCard("Goblin Warrior", 2,
+                                                Rarity.COMMON.value, 3, 2)
+
+    available_mana2: int = 5
+    is_playable: bool = goblin_warrior.is_playable(available_mana2)
+    game_state: Dict = {
+                        'is_playable': is_playable,
+                        'available_mana': available_mana2,
+                        'battlefield': battlefield
+                        }
+
+    goblin_warrior.play(game_state)
 
     # Try attacking a goblin.
     print("\nFire Dragon attacks Goblin Warrior:")

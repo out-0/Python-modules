@@ -21,6 +21,7 @@ class Rarity(Enum):
 
     COMMON = "Common"
     RARE = "Rare"
+    EPIC = "Epic"
     LEGENDARY = "Legendary"
 
 
@@ -112,4 +113,5 @@ def main() -> None:
     print("Polymorphism in action: Same interface, different card behaviors!")
 
 
-main()
+if __name__ == '__main__':
+    main()

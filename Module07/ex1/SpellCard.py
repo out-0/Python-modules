@@ -63,6 +63,5 @@ class SpellCard(Card):
                 'mana_used': self.cost,
                 'effect': self.effect_type}
 
-    def resolve_effect(self, targets: list) -> dict:
-        """"""
-        pass
+        def resolve_effect(self, targets: list) -> dict:
+            return {'targets': targets, 'damage': 4, 'effect': 'burn'}

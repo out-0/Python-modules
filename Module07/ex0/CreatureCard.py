@@ -48,7 +48,8 @@ class CreatureCard(Card):
 
         try:
             if not game_state['is_playable']:
-                print("This Card is not playable ❌️, often bot enough mana.")
+                print("This Card is not playable ❌️, "
+                      "often cause you don't have enough mana.")
                 return {}
 
             if game_state['available_mana'] < self.cost:
