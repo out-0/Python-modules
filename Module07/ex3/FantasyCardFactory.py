@@ -11,52 +11,104 @@ import random
 # ---- CREATURES ----
 class Dragon(CreatureCard):
     """"""
+
     def __init__(self):
         super().__init__("Fire Dragon", 5, Rarity.LEGENDARY.value, 7, 5)
 
 
 class Goblin(CreatureCard):
     """"""
+
     def __init__(self):
         super().__init__("Goblin Warrior", 2, Rarity.COMMON.value, 2, 2)
+
+
+class Enemy(CreatureCard):
+    """Enemy target to be used in demonstration exemple"""
+
+    def __init__(self):
+        """
+        Initialize the enemy with the base state for
+        an Creature Card
+        """
+        super().__init__("Enemy Player", 2, Rarity.COMMON.value, 3, 1)
 
 
 # ---- SPELLS -----
 class Fire(SpellCard):
     """"""
+
     def __init__(self):
         super().__init__("Fireball", 4, Rarity.COMMON.value, "Deal 4 damage")
+        # I Add that attribute to be used later
+        # since the effect specify the damage as string
+        # so i need a way to calculate damage as int in strategy.
+        self.damage = 4
 
 
 class Ice(SpellCard):
     """"""
+
     def __init__(self):
         super().__init__("Ice Lance", 2, Rarity.COMMON.value, "Freeze target")
+        # I Add that attribute to be used later
+        # since the effect specify the damage as string
+        # so i need a way to calculate damage as int in strategy.
+        self.damage = 0
 
 
 class Lightning(SpellCard):
     """"""
+
     def __init__(self):
         super().__init__("Lightning Bolt", 3, Rarity.RARE.value,
                          "Deal 3 damage")
+
+        # I Add that attribute to be used later
+        # since the effect specify the damage as string
+        # so i need a way to calculate damage as int in strategy.
+        self.damage = 3
 
 
 # ---- ARTIFACTS -----
 class Rings(ArtifactCard):
     """"""
+
     def __init__(self):
-        super().__init__("Mana Ring", 1, Rarity.RARE.value, 5, "+1 mana per turn")
+        super().__init__("Mana Ring", 1, Rarity.RARE.value, 5,
+                         "+1 mana per turn")
+        # I Add that attribute to be used later
+        # since the effect specify the damage as string
+        # so i need a way to calculate damage as int in strategy.
+        self.damage = 0
+
 
 class Staffs(ArtifactCard):
     """"""
+
     def __init__(self):
-        super().__init__("Magic Staff", 3, Rarity.EPIC.value, 3, "Boost spell damage")
+        """"""
+
+        super().__init__("Magic Staff", 3, Rarity.EPIC.value, 3,
+                         "Boost spell damage")
+        # I Add that attribute to be used later
+        # since the effect specify the damage as string
+        # so i need a way to calculate damage as int in strategy.
+        self.damage = 0
 
 
 class Crystals(ArtifactCard):
     """"""
+
     def __init__(self):
-        super().__init__("Power Crystal", 2, Rarity.RARE.value, 4, "Draw extra card")
+        """"""
+
+        super().__init__("Power Crystal", 2, Rarity.RARE.value, 4,
+                         "Draw extra card")
+        # I Add that attribute to be used later
+        # since the effect specify the damage as string
+        # so i need a way to calculate damage as int in strategy.
+        self.damage = 4
 
 
 # - Fantasy factory
@@ -82,8 +134,8 @@ class FantasyCardFactory(CardFactory):
 
         self._spell_types: Dict = {
                                   "fireball": Fire,
-                                  #"ice": Ice,
-                                  #"lightning": Lightning
+                                  # "ice": Ice,
+                                  # "lightning": Lightning
                                   }
 
         self._artifact_types: Dict = {"mana_ring": Rings}
@@ -118,7 +170,7 @@ class FantasyCardFactory(CardFactory):
                 return Goblin()
             else:
                 print("Warring: be more precise in your choose.")
-            
+
         print("Error: Invalid data, check again ❌️ ")
         print("Or just take that shit goblin hehe 👺 ")
         return Goblin()
@@ -137,7 +189,11 @@ class FantasyCardFactory(CardFactory):
         """
 
         # Current catalog of creature cards.
-        spell_categories: List[str] = ["Fireball", "Ice Lance", "Lightning Bolt"]
+        spell_categories: List[str] = [
+                                       "Fireball",
+                                       "Ice Lance",
+                                       "Lightning Bolt"
+                                      ]
 
         # Handle string (name)
         if isinstance(name_or_power, str):
@@ -145,7 +201,7 @@ class FantasyCardFactory(CardFactory):
             if card_name in spell_categories:
                 card_class = self._spell_types[card_name]
                 return card_class()
-        
+
         # Handle power (int)
         elif isinstance(name_or_power, int):
             if name_or_power >= 4:
@@ -158,7 +214,7 @@ class FantasyCardFactory(CardFactory):
                 print("Warring: be more precise in your choose.")
                 print("Also: because your mistake so take that shit ice lance 🧊 ")
                 return Ice()
-            
+
         print("Error: Invalid data, check again ❌️ ")
         print("Or just take that shit ice lance hehe 🧊")
         return Ice()
@@ -171,13 +227,17 @@ class FantasyCardFactory(CardFactory):
 
         Take name or power:
 
-        If a name is provided -> check which card category and return card from it.
-        If power is provided -> check and return the type match the power.
+        If a name is provided -> check which card category and return card from
+        it If power is provided -> check and return the type match the power.
 
         """
 
         # Current catalog of creature cards.
-        artifact_categories: List[str] = ["Mana Ring", "Magic Staff", "Power Crystal"]
+        artifact_categories: List[str] = [
+                                          "Mana Ring",
+                                          "Magic Staff",
+                                          "Power Crystal"
+                                         ]
 
         # Handle string (name)
         if isinstance(name_or_power, str):
@@ -195,9 +255,9 @@ class FantasyCardFactory(CardFactory):
                 return Rings()
             else:
                 print("Warring: be more precise in your choose.")
-                print("Also: because its your mistake so take that shit ring 💍 ")
+                print("Also: because its your mistake so take that shit ring 💍")
                 return Rings()
-            
+
         print("Error: Invalid data, check again ❌️ ")
         print("Or just take that shit ring hehe 💍 ")
         return Rings()
@@ -250,7 +310,6 @@ class FantasyCardFactory(CardFactory):
         result['total count'] = size
         return result
 
-
     def get_supported_types(self) -> dict:
         """Return a structural of types available
 
@@ -262,4 +321,3 @@ class FantasyCardFactory(CardFactory):
             'spells': list(self._spell_types.keys()),
             'artifacts': list(self._artifact_types.keys())
         }
-

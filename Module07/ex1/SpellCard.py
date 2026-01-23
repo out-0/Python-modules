@@ -64,4 +64,8 @@ class SpellCard(Card):
                 'effect': self.effect_type}
 
         def resolve_effect(self, targets: list) -> dict:
-            return {'targets': targets, 'damage': 4, 'effect': 'burn'}
+            return {
+                    'targets': targets,
+                    'damage': 4,
+                    'effect': 'burn'
+                    }

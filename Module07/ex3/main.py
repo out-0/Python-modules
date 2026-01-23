@@ -21,7 +21,7 @@ def main() -> None:
 
     # Print the supported types of cards matched demo
     supported_types: Dict = fantasy_factory.get_supported_types()
-    print(f"Available types: {supported_types}")
+    print(f"Available types: {supported_types}\n")
 
     # Expend card type registration with new categories
     fantasy_factory._spell_types.update({
@@ -35,8 +35,7 @@ def main() -> None:
 
     # Show the hand cards will simulated.
     print("Simulating aggressive turn...")
-    print("Hand: [Fire Dragon (5), Goblin Warrior (2), Lightning Bolt (3)]")
-
+    print("Hand: [Fire Dragon (5), Goblin Warrior (2), Lightning Bolt (3)]\n")
 
     print(engine.simulate_turn())
 

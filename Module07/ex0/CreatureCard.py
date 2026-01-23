@@ -62,7 +62,7 @@ class CreatureCard(Card):
 
         # If all good:
         game_state['available_mana'] -= self.cost
-        game_state['battlefield'].append(self.name)
+        game_state['battlefield'].append(self)
 
         return {'card_played': self.name,
                 'mana_used': self.cost,
@@ -111,16 +111,20 @@ class CreatureCard(Card):
         """
 
         # Phase 1 check.
-        if self.attack <= 0 and self.health <= 0:
+        if self.health <= 0:
             print("Your Creature Card is already Dead 💀")
             return {}
-        # Phase 2 check.
-        try:
-            # Check target also has attack and health (Creature Card)
-            if target.attack and target.health:
-                pass
-        except Exception:
+        if self. attack < 0:
+            print("Warring: Invalid Card Attack value")
+
+        # Phase 2 check
+        if isinstance(target, CreatureCard):
+            # Damage the target
+            target.health -= self.attack
+        else:
             print("Target not a Creature Card, you can't attack it 💥")
+            return {}
+
 
         # Fill the battle information
         # The Creature Card(self) is attacking the target
