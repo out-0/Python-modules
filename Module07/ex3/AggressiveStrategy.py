@@ -4,8 +4,11 @@ from ex0.CreatureCard import CreatureCard
 
 
 class AggressiveStrategy:
-    """This strategy is relay on using the cards that cost
+    """
+    This strategy is relay on using the cards that cost
     less than 5 mana point.
+    Also choosing attacking the dangerous targets with higher
+    attack value first.
     """
 
     # Execute actions of strategy.
@@ -48,7 +51,7 @@ class AggressiveStrategy:
             for card in hand:
                 if card.cost < 5:
                     card.play(game_state)  # => Play card
-                    cards_played.append(card.name)  # => Add to played
+                    cards_played.append(card)  # => Add to played
                     mana_used += card.cost
 
                     # if its Creature so he can fight
@@ -84,7 +87,7 @@ class AggressiveStrategy:
         # Map and extract names from objects.
         enemies = [enemy.name for enemy in enemies]
         return {
-                'cards_played': cards_played,
+                'cards_played': [card.name for card in cards_played],
                 'mana_used': mana_used,
                 'targets_attacked': enemies,
                 'damage_dealt': damage_dealt
@@ -95,4 +98,29 @@ class AggressiveStrategy:
         return "AggressiveStrategy"
 
     def prioritize_targets(self, available_targets: list) -> list:
-        pass
+        """
+        Aggressive prioritization: Sort targets by their attack power
+        (Highest attack first) to attack most dangerous quickly.
+        """
+
+        if not available_targets:
+            return []
+
+        if len(available_targets) == 1:
+            return available_targets
+
+        # Helper function to get attack value,
+        # since .sort take function as argument
+        def get_attack_value(target: Card) -> int:
+            return target.attack
+
+        # Sort method take :
+        #   key=function that return value to be sort by.
+        #   reverse= Bool decide the order reversed or not.
+        #
+        # Keyword-Only Arguments
+        # since the actual prototype use * so we explicitly need
+        # to named the arguments since they no more relay to positional
+        available_targets.sort(key=get_attack_value, reverse=True)
+
+        return available_targets

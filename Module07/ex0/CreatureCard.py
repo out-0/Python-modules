@@ -125,7 +125,6 @@ class CreatureCard(Card):
             print("Target not a Creature Card, you can't attack it 💥")
             return {}
 
-
         # Fill the battle information
         # The Creature Card(self) is attacking the target
         # and damage it.

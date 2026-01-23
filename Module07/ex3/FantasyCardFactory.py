@@ -10,17 +10,27 @@ import random
 
 # ---- CREATURES ----
 class Dragon(CreatureCard):
-    """"""
+    """
+    Dragon structure card
+    that represent a powerful creature card
+    """
 
     def __init__(self):
+        """Initialize from base"""
+
         super().__init__("Fire Dragon", 5, Rarity.LEGENDARY.value, 7, 5)
 
 
 class Goblin(CreatureCard):
-    """"""
+    """
+    Goblin structure card
+    that represent a powerful common card
+    """
 
     def __init__(self):
-        super().__init__("Goblin Warrior", 2, Rarity.COMMON.value, 2, 2)
+        """Initialize from base"""
+
+        super().__init__("Goblin Warrior", 2, Rarity.COMMON.value, 5, 2)
 
 
 class Enemy(CreatureCard):
@@ -36,9 +46,11 @@ class Enemy(CreatureCard):
 
 # ---- SPELLS -----
 class Fire(SpellCard):
-    """"""
+    """Fire spell category card"""
 
     def __init__(self):
+        """Initialize from base"""
+
         super().__init__("Fireball", 4, Rarity.COMMON.value, "Deal 4 damage")
         # I Add that attribute to be used later
         # since the effect specify the damage as string
@@ -47,9 +59,11 @@ class Fire(SpellCard):
 
 
 class Ice(SpellCard):
-    """"""
+    """Ice spell category card"""
 
     def __init__(self):
+        """Initialize from base"""
+
         super().__init__("Ice Lance", 2, Rarity.COMMON.value, "Freeze target")
         # I Add that attribute to be used later
         # since the effect specify the damage as string
@@ -58,9 +72,14 @@ class Ice(SpellCard):
 
 
 class Lightning(SpellCard):
-    """"""
+    """
+    Artifact Card structure for card with effects
+    applied during the game
+    """
 
     def __init__(self):
+        """Initialize from base"""
+
         super().__init__("Lightning Bolt", 3, Rarity.RARE.value,
                          "Deal 3 damage")
 
@@ -72,9 +91,11 @@ class Lightning(SpellCard):
 
 # ---- ARTIFACTS -----
 class Rings(ArtifactCard):
-    """"""
+    """Rings formula"""
 
     def __init__(self):
+        """Initialize from base"""
+
         super().__init__("Mana Ring", 1, Rarity.RARE.value, 5,
                          "+1 mana per turn")
         # I Add that attribute to be used later
@@ -84,10 +105,10 @@ class Rings(ArtifactCard):
 
 
 class Staffs(ArtifactCard):
-    """"""
+    """Staffs artifact"""
 
     def __init__(self):
-        """"""
+        """Initialize from base"""
 
         super().__init__("Magic Staff", 3, Rarity.EPIC.value, 3,
                          "Boost spell damage")
@@ -98,10 +119,10 @@ class Staffs(ArtifactCard):
 
 
 class Crystals(ArtifactCard):
-    """"""
+    """Crystals cards which kinda rare"""
 
     def __init__(self):
-        """"""
+        """Initialize from base"""
 
         super().__init__("Power Crystal", 2, Rarity.RARE.value, 4,
                          "Draw extra card")
@@ -183,7 +204,7 @@ class FantasyCardFactory(CardFactory):
 
         Take name or power:
 
-        If a name is provided -> check which card category and return card from it.
+        If a name is provided -> check which card category and return from it.
         If power is provided -> check and return the type match the power.
 
         """
@@ -212,7 +233,8 @@ class FantasyCardFactory(CardFactory):
                 return Ice()
             else:
                 print("Warring: be more precise in your choose.")
-                print("Also: because your mistake so take that shit ice lance 🧊 ")
+                print("Also: because its your mistake "
+                      "so take that shit ice lance  🧊 ")
                 return Ice()
 
         print("Error: Invalid data, check again ❌️ ")
@@ -254,8 +276,9 @@ class FantasyCardFactory(CardFactory):
             elif name_or_power == 1:
                 return Rings()
             else:
-                print("Warring: be more precise in your choose.")
-                print("Also: because its your mistake so take that shit ring 💍")
+                print("Warring: be more precise in your choose")
+                print("Also: because its your mistake "
+                      "so take that shit ring 💍")
                 return Rings()
 
         print("Error: Invalid data, check again ❌️ ")
