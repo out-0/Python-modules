@@ -1,4 +1,5 @@
 from ex4.TournamentCard import TournamentCard
+from ex4.TournamentPlatform import TournamentPlatform
 from ex1.main import Rarity
 from typing import List, Dict
 from ex0.Card import Card
@@ -23,11 +24,11 @@ def main() -> None:
                                       Rarity.RARE.value, 5, 10
                                      )
 
-    platform: TournamentCard = TournamentCard()
+    platform: TournamentPlatform = TournamentPlatform()
 
     # Registering Cards in the Tournament
-    platform.register(fire_dragon)
-    platform.register(ice_wizard)
+    platform.register_card(fire_dragon)
+    platform.register_card(ice_wizard)
 
     # Extract the interfaces of object, (bases)
     bases: List = [obj.__name__ for obj in fire_dragon.__class__.__bases__]
@@ -58,14 +59,11 @@ def main() -> None:
 
     # Creating a match between those two cards (fire dragon and ice wizard)
     print("Creating tournament match..")
+    platform.create_match(fire_dragon, ice_wizard)
 
 
 
 
-    battlefield: List = []
-    player1_mana: int = 30
-    player2_mana: int = 30
-    is_playable: bool = False
 
     game_state: Dict = {
                         'is_playable': is_playable,

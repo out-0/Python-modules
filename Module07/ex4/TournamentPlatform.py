@@ -9,9 +9,11 @@ class TournamentPlatform:
     def __init__(self):
         """
         Initialize the platform with base needed
+
+        Also map a dictionary of Card_id : Card
         """
 
-        self.registered_cards: List = []
+        self.registered_cards: Dict = {}
 
     def register_card(self, card: TournamentCard) -> str:
         """
@@ -26,21 +28,32 @@ class TournamentPlatform:
             print("Warring: Your Card not able to apply for Tournament")
             return
 
-        self.registered_cards.append(card)
-        return "{card.name} are registered successfully"
+        self.registered_cards[card.card_id] = card
+        return f"{card.card_id}: {card.name} are registered successfully"
 
     def create_match(self, card1_id: str, card2_id: str) -> dict:
         """"""
-        card1: Card = [
-                       card for card in self.registered_cards
-                       if card.card_id == card1_id
-                      ]
-        card2: Card = [
-                       card for card in self.registered_cards
-                       if card.card_id == card2_id
-                      ]
 
-        cards: List[Card] = [card1, card2]
+        card1: Card = self.registered_cards.get(card1_id)
+        card2: Card = self.registered_cards.get(card2_id)
+
+        if not card1 or not card2:
+                return {"error": "One or both cards not found"}
+
+        player1_mana: int = 30
+        player2_mana: int = 30
+        battlefield: List = []
+
+        card1.play({
+                    'available_mana': player1_mana,
+                    'battlefield': battlefield
+                    })
+        card2.play()
+
+        while True:
+            card1
+
+        winner.update_
 
         battlefield: List = []
         player1_mana: int = 30
