@@ -91,7 +91,7 @@ class EliteCard(Card, Combatable, Magical):
 
         # Phase 2 check.
         if not isinstance(target, Combatable):
-            return {"Error": "must be a combatable card (monster, elf, human...) 💥")
+            return {"Error": "must be a combatable card (monster, elf, human...) 💥"}
 
         # Let defend handle damage.
         defense_result = target.defend(self.attack_power)

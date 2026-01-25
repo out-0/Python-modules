@@ -79,8 +79,6 @@ class TournamentCard(Card, Combatable, Rankable):
         # Check if the target actually can be attacked,
         # of course if its not a Tournament (monster, elf...)
         # we cant attack another type like Spell Card.
-        # if error raised while accessing those attribute its mean
-        # the Card doesn't have them.
         """
 
         # Phase 1 check.
@@ -150,7 +148,15 @@ class TournamentCard(Card, Combatable, Rankable):
         Return a snapshot of the stats
         of comabat interface
         """
-        pass
+        return {
+                'attack_power': self.attack_value,
+                'defense_power': self.defense_value,
+                'health': self.health_value,
+                'record': {
+                           'wins': self.wins,
+                           'losses': self.losses
+                          }
+                }
 
     def calculate_rating(self) -> int:
         """

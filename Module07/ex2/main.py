@@ -7,6 +7,26 @@ from typing import List, Dict
 from ex0.CreatureCard import CreatureCard
 
 
+# ----------A general function to get class methods.
+def get_all_public_methods(cls):
+    """
+    Get all public methods from a class (abstract AND concrete)
+    Since the Card class has methods that not abstract so we can't
+    just do .__abstractmethods__, so for that we get all class
+    public methods by filtering them to avoid the classes start with
+    (" _ ") which is builtin.
+
+    from class return the method or attribute match the name.
+    getattr(cls, method_name)
+
+    you can add callable() to be sure its a method
+    """
+
+    # List comprehension
+    return [name for name in dir(cls)
+            if not name.startswith('_') and callable(getattr(cls, name))]
+
+
 def main() -> None:
     """Main entry point"""
 
@@ -14,27 +34,6 @@ def main() -> None:
     battlefield: List[Card] = []
 
     print("\n=== DataDeck Ability System ===\n")
-
-    # ----------A general function to get class methods.
-    def get_all_public_methods(cls):
-        """Get all public methods from a class (abstract AND concrete)
-        Since the Card class has methods that not abstract so we can't
-        just do .__abstractmethods__, so for that we get all class
-        public methods by filtering them to avoid the classes start with
-        (" _ ") which is builtin.
-
-        from class return the method or attribute match the name.
-        getattr(cls, method_name)
-
-        you can add callable() to be sure its a method
-
-        """
-
-        # List comprehension
-        return [name for name in dir(cls)
-                if not name.startswith('_') and callable(getattr(cls, name))]
-
-    # ---------------------------------------------------
 
     print("EliteCard capabilities:")
 

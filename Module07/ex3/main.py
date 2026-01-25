@@ -48,4 +48,5 @@ def main() -> None:
     print("Abstract Factory + Strategy Pattern: Maximum flexibility achieved!")
 
 
-main()
+if __name__ == "__main__":
+    main()

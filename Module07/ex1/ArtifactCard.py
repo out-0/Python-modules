@@ -63,12 +63,14 @@ class ArtifactCard(Card):
         # If all good lets play it and activate it
         # no need for the return dict also reduce durability.
         ArtifactCard.activate_ability(self)
-        self.durabiliry -= 1
+        self.durability -= 1
         game_state['available_mana'] -= self.cost
 
-        return {'card_played': self.name,
+        return {
+                'card_played': self.name,
                 'mana_used': self.cost,
-                'effect': self.effect}
+                'effect': self.effect
+                }
 
     def activate_ability(self) -> dict:
         """

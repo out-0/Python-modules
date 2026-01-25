@@ -4,7 +4,11 @@ from ex0.Card import Card
 
 
 class TournamentPlatform:
-    """"""
+    """
+    Platform that manage and organize
+    registration of tournament cards
+    ant there matches
+    """
 
     def __init__(self):
         """

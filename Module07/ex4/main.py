@@ -10,7 +10,7 @@ def main() -> None:
 
     print("\n=== DataDeck Tournament Platform ===\n")
 
-    print("Registering Tournament Cards...")
+    print("Registering Tournament Cards...\n")
 
     fire_dragon: Card = TournamentCard(
                                        "dragon_001",
@@ -58,7 +58,7 @@ def main() -> None:
     print('')
 
     # Creating a match between those two cards (fire dragon and ice wizard)
-    print("Creating tournament match..")
+    print("Creating tournament match...")
 
     match_result: Dict = platform.create_match(
                                                fire_dragon.card_id,
