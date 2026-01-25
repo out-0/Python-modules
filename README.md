@@ -68,3 +68,11 @@ also how to design a small system with a complex component.**
 - P4: Take a look of the problem of circular dependencies and try a methods to breaking the circular curse.
 
 **The Module was a quick overview of the packages and the importing concepts in python which is essential for most python projects.**
+
+### Module07
+- 0: Another introduction to abstraction with a little game system and also discover the enumeration
+- 1: Practicing concreted implementation based on some logic from previous exercise.
+- 2: Implement multiple abstract inheritance for shared interfaces.
+- 3: Practice combining the Factory and Strategy patterns within a GameEngine to achieve maximum architectural flexibility.
+- 4: Advanced Interface Composition use Multiple Inheritance based on preivous actions to build a small robust system
+
