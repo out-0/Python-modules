@@ -114,8 +114,9 @@ class CreatureCard(Card):
         if self.health <= 0:
             print("Your Creature Card is already Dead 💀")
             return {}
-        if self. attack < 0:
+        if self.attack < 0:
             print("Warring: Invalid Card Attack value")
+            return {}
 
         # Phase 2 check
         if isinstance(target, CreatureCard):

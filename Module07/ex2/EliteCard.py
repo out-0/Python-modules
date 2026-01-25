@@ -86,29 +86,17 @@ class EliteCard(Card, Combatable, Magical):
         """
 
         # Phase 1 check.
-        if self.attack_power <= 0 and self.health <= 0:
-            print("Your Elite Card is already Dead 💀")
-            return {}
+        if self.attack_power <= 0 or self.health <= 0:
+            return {"Error": "already Dead 💀 or can't attack"}
+
         # Phase 2 check.
-        try:
-            # Check target also has attack and health (Creature Card)
-            if target.attack_power and target.health:
-                pass
-        except Exception:
-            print("Error: Target "
-                  "must be a creature card (monster, elf, human...) 💥")
+        if not isinstance(target, Combatable):
+            return {"Error": "must be a combatable card (monster, elf, human...) 💥")
 
-        # ----------Calculate the damage applied.
-        # Get value of defense attr if don't have assign default(0)
-        target_defense: int = getattr(target, 'defense_power', 0)
+        # Let defend handle damage.
+        defense_result = target.defend(self.attack_power)
+        damage = defense_result.get('damage_taken', 0)
 
-        damage: int = self.attack_power - target_defense
-        if damage < 0:
-            damage: int = 0
-        # Apply the damage to the target
-        target.health -= damage
-        if target.health <= 0:
-            print(f"Agghhh: {target.name} dying 💀")
         # Fill the battle information
         result: Dict = {
                 'attacker': self.name,
@@ -118,7 +106,7 @@ class EliteCard(Card, Combatable, Magical):
                 }
         return result
 
-    def defend(self, incoming_damage: int) -> None:
+    def defend(self, incoming_damage: int) -> dict:
         """defend an incoming_damage.
 
         Validates that the card still alive and a valid incoming value.
@@ -143,22 +131,16 @@ class EliteCard(Card, Combatable, Magical):
             return
         # Set defaults so they always exist
         damage_blocked = self.defense_power
-        damage_taken = 0
-        is_still_alive = self.health > 0
-        try:
-            damage_blocked: int = self.defense_power
-            damage_taken: int = incoming_damage - damage_blocked
-            self.health -= damage_taken
-            is_still_alive: bool = self.health > 0
+        damage_taken = max(0, incoming_damage - damage_blocked)
 
-        except Exception:
-            print("Error: something happen while defending 🛡️")
+        # Apply the damage
+        self.health -= damage_taken
 
         return {
                 'defender': self.name,
                 'damage_taken': damage_taken,
                 'damage_blocked': damage_blocked - damage_taken,
-                'still_alive': is_still_alive
+                'still_alive': self.health > 0
                 }
 
     def cast_spell(self, spell_name: str, targets: list) -> dict:

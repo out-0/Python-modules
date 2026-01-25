@@ -15,15 +15,15 @@ def main() -> None:
     fire_dragon: Card = TournamentCard(
                                        "dragon_001",
                                        "Fire Dragon", 8,
-                                       Rarity.LEGENDARY.value, 10, 10
+                                       Rarity.LEGENDARY.value, 10, 4, 10
                                       )
 
     ice_wizard: Card = TournamentCard(
                                       "wizard_001",
                                       "Ice Wizard", 5,
-                                      Rarity.RARE.value, 5, 10
+                                      Rarity.RARE.value, 5, 3, 10
                                      )
-
+    # Create the platform who manage the tournament.
     platform: TournamentPlatform = TournamentPlatform()
 
     # Registering Cards in the Tournament
@@ -59,36 +59,24 @@ def main() -> None:
 
     # Creating a match between those two cards (fire dragon and ice wizard)
     print("Creating tournament match..")
-    platform.create_match(fire_dragon, ice_wizard)
 
+    match_result: Dict = platform.create_match(
+                                               fire_dragon.card_id,
+                                               ice_wizard.card_id
+                                               )
+    print(f"Match result: {match_result}\n")
 
+    print("Tournament Leaderboard:")
+    leaderboard: List[str] = platform.get_leaderboard()
+    for card in leaderboard:
+        print(card)
 
+    print("\nPlatform Report:")
+    report: Dict = platform.generate_tournament_report()
+    print(report)
 
-
-    game_state: Dict = {
-                        'is_playable': is_playable,
-                        'battlefield': battlefield,
-                        'available_mana': None
-                        }
-
-    # List of kinda players map their mana and cards to play
-    players = [
-               {"mana": player1_mana, "card": fire_dragon},
-               {"mana": player2_mana, "card": ice_wizard}
-              ]
-
-    for player in players:
-        current_mana = player["mana"]
-        current_card = player["card"]
-
-        # Update the state first
-        game_state['available_mana'] = current_mana
-
-        # Now pass the actual dictionary, not the result of an update() call
-        result = current_card.play(game_state)
-
-
-
+    print("\n=== Tournament Platform Successfully Deployed! ===")
+    print("All abstract patterns working together harmoniously!")
 
 
 main()
