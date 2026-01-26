@@ -1,9 +1,6 @@
 import sys
 import os
 
-os.path
-sys.path
-
 
 def main() -> None:
     """Entry point for the logic"""
