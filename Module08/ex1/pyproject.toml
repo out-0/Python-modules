@@ -1,0 +1,26 @@
+[project]
+name = "ex1"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "out",email = "ayoubarid000@gmail.com"}
+]
+requires-python = ">=3.14"
+dependencies = [
+    "requests (>=2.32.5,<3.0.0)",
+    "matplotlib (>=3.10.8,<4.0.0)",
+    "pandas (>=3.0.0,<4.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+
+# Disable the second part of poetry
+# which is package management so its try
+# to treat the project as package which will fail in our case
+[tool.poetry]
+package-mode = false

@@ -4,10 +4,10 @@ from importlib.metadata import version, PackageNotFoundError
 def main():
     # Define your requirements
     dependencies: dict = {
-                    'pandas': 'Data manipulation',
-                    'requests': 'Network access',
-                    'matplotlib': 'Visualization'
-                   }
+                          'pandas': 'Data manipulation',
+                          'requests': 'Network access',
+                          'matplotlib': 'Visualization'
+                         }
 
     missing_count: int = 0
     print("LOADING STATUS: Loading programs...\n")
@@ -17,6 +17,7 @@ def main():
     for pkg, usage in dependencies.items():
         try:
             # Get the version (this also checks if it exists)
+            # using version method from metadata
             v: str = version(pkg)
             print(f"[OK] {pkg} ({v}) - {usage} ready")
         except PackageNotFoundError:
@@ -27,29 +28,43 @@ def main():
     if missing_count > 0:
         print(f"\n{missing_count} dependencies are missing.")
         print("For installation use: pip install -r requirements.txt")
+        print("OR: You can use 'poetry install'")
         return
 
     # On SUCCESS == Only import the heavy libraries here ---
     print("\nAnalyzing Matrix data...")
     import pandas
-    import matplotlib.pyplot
+    import matplotlib.pyplot as plt
     import requests
 
     resp = requests.get("https://jsonplaceholder.typicode.com/posts")
-    print(type(resp))
-    print(resp)
-    print(dir(resp))
-    print('')
-    print('')
-    print(resp.url)
-    print(resp.headers)
+    # Check if the request fail or not.
+    try:
+        if resp.status_code >= 404:
+            raise Exception("HTTP error: Data fetching fail")
+    except Exception as e:
+        print(e)
 
-    # Example logic:
-    # df = pd.DataFrame({'a': [1, 2], 'b': [3, 4]})
-    # print(df)
+    # Extract the json data (decoding the bytes content into json structure)
+    json_data: list[dict] = resp.json()
+
+    print("Processing 1000 data points...")
+    # Covert that json data to a convenient structural data sheet
+    pandas_format = pandas.DataFrame(json_data)
+
+    print("Generating visualization...")
+    # Extract numerical columns since plot
+    # can't operate on sentence (strings) columns
+    # User double list to extract a DataFrame(2D) formate instead of series(1D)
+    numberical_columns = pandas_format[['id', 'userId']]
+
+    # Draw the visualization in its memory space place
+    numberical_columns.plot()
 
     print('')
     print("Analysis complete!")
+    # Save the visualization as png picture.
+    plt.savefig('matrix_analysis.png')
     print("Results saved to: matrix_analysis.png")
 
 
