@@ -27,8 +27,14 @@ def main():
 
     if missing_count > 0:
         print(f"\n{missing_count} dependencies are missing.")
-        print("For installation use: pip install -r requirements.txt")
-        print("OR: You can use 'poetry install'")
+        print("For installation:\n")
+        print("--: Using pip:\n")
+        print("pip install -r requirements.txt\n")
+        print("--: Using poetry:\n")
+        print("poetry env activate")
+        print("source /home/your_user/.cache/pypoetry/virtualenvs/"
+              "ex1-BvIkvnFx-py3.14/bin/activate")
+        print("poetry install")
         return
 
     # On SUCCESS == Only import the heavy libraries here ---
