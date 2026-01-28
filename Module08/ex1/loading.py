@@ -1,7 +1,9 @@
 from importlib.metadata import version, PackageNotFoundError
 
 
-def main():
+def main() -> None:
+    """Main entry point"""
+
     # Define your requirements
     dependencies: dict = {
                           'pandas': 'Data manipulation',
