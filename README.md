@@ -76,3 +76,11 @@ also how to design a small system with a complex component.**
 - 3: Practice combining the Factory and Strategy patterns within a GameEngine to achieve maximum architectural flexibility.
 - 4: Advanced Interface Composition use Multiple Inheritance based on preivous actions to build a small robust system
 
+**This module deepens abstraction through a game-based system, moving from enums and concrete logic to advanced interface design. It culminates in a flexible architecture using multiple inheritance and Factory/Strategy patterns to build a robust, extensible engine.**
+
+### Module08
+- 0: Demonstrate the power of virtual for isolate python dependencies between projects.
+- 1: Introduce the difference between pip package management with -r requirements and the poetry wiht its toml config.
+- 2: Play with some high quality libraries like pandas and requests, matplotlib which are a very useful collection.
+
+**The module introduce the real world projects preparation before starting into them which a useful tools to keep the projects stable and isolated**
