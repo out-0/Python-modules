@@ -3,9 +3,9 @@ name = "ex1"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "out",email = "ayoubarid000@gmail.com"}
+    {name = "out"}
 ]
-requires-python = ">=3.14"
+requires-python = ">=3.10"
 dependencies = [
     "requests (>=2.32.5,<3.0.0)",
     "matplotlib (>=3.10.8,<4.0.0)",
