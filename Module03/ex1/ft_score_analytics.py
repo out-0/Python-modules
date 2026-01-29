@@ -45,7 +45,8 @@ def parse_scores() -> None:
     print(f"Scores processed: {valid_scores_list}")
     print(f"Total players: {len(valid_scores_list)}")
     print(f"Total score: {sum(valid_scores_list)}")
-    print(f"Average score: {sum(valid_scores_list) / len(valid_scores_list):.1f}")
+    print(f"Average score: "
+          f"{sum(valid_scores_list) / len(valid_scores_list):.1f}")
     print(f"High score: {max(valid_scores_list)}")
     print(f"Low score: {min(valid_scores_list)}")
     print(f"Score range: {max(valid_scores_list) - min(valid_scores_list)}")

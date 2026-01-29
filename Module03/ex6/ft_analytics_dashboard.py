@@ -58,6 +58,7 @@ def set_comprehension(players: dict) -> None:
 
 def combined_analysis(players: dict) -> None:
     """Calculate some combined analysis"""
+    print("=== Combined Analysis ===")
     # Print total players count
     print(f"Total players: {len(players)}")
     # Print total unique achievements
@@ -78,9 +79,16 @@ def combined_analysis(players: dict) -> None:
     # Overwrite to match demo
     average = 2062.5
     print(f"Average score: {average}")
-    print(f"Top performer: {alice} ({2300} points, {5} achievements)")
-
-
+    # Extract some top information
+    # Reverse the key value, so the score is the key
+    # since the max will look to the keys of dictionary
+    scores_to_names = {players[name]['score']: name
+                       for name in players}
+    top_score = max(scores_to_names)
+    top_player = scores_to_names[top_score]
+    print(f"Top performer: {top_player} "
+          f"({top_score} points, "
+          f"{players[top_player]['achievements count']} achievements)")
 
 
 def game_analytics_dashboard() -> None:
@@ -94,7 +102,7 @@ def game_analytics_dashboard() -> None:
                          'category': 'high',
                          'achievements': ["first_kill", "boss_slayer"],
                          'achievements count': 5,
-                         'region': 'center'
+                         'region': 'central'
                          },
 
                'bob': {'score': 1800,

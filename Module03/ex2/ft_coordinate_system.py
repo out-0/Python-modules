@@ -54,7 +54,7 @@ def test_coordinate_system() -> None:
         print(f"Position created: {position}")
         print(
                 f"Distance between ({x1}, {y1}, {z1}) and {position}: "
-                f"{distance:.1f}"
+                f"{distance:.2f}"
                 )
         print("")
         # Parse position of multi different inputs
