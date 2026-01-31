@@ -75,8 +75,8 @@ def main() -> None:
         # This line just to silent flake for unused local variables
         del delta_station
 
-    except ValidationError:
-        print("Input should be less than or equal")
+    except ValidationError as e:
+        print(e.errors()[0]['msg'])
 
 
 main()

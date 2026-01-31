@@ -1,7 +1,8 @@
 from enum import Enum
 from pydantic import BaseModel, Field, model_validator, ValidationError
+from pydantic_core import PydanticCustomError, ErrorDetails
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List, Self
 
 
 class ContactType(Enum):
@@ -47,7 +48,7 @@ class AlienContact(BaseModel):
     is_verified: bool = Field(default=False)
 
     @model_validator(mode="after")
-    def contact_validation(self):
+    def contact_validation(self) -> Self:
         """
         Model validator to validate some rules after
         the class created, and before the instance initialized
@@ -75,24 +76,28 @@ class AlienContact(BaseModel):
             # The validator itself will catch that ValueError
             # and wrap it into ValidationError which u can caught
             # in your main or something when creating model instance.
-            raise ValueError("Contact ID must start with 'AC'")
+
+            raise PydanticCustomError(
+                "ValueError", "Contact ID must start with 'AC'")
+
+        if self.contact_type == ContactType.PHYSICAL and not self.is_verified:
+            raise PydanticCustomError(
+                "ValueError", "Physical contact reports must be verified"
+            )
 
         if (
-            self.contact_type.value == ContactType.PHYSICAL.value
-            and not self.is_verified
-        ):
-            raise ValueError("Physical contact reports must be verified")
-
-        if (
-            self.contact_type.value == ContactType.TELEPATHIC.value
+            self.contact_type == ContactType.TELEPATHIC
             and self.witness_count < 3
         ):
-            raise ValueError(
+            raise PydanticCustomError(
+                "ValueError",
                 "Telepathic contact requires at least 3 witnesses")
 
         if self.signal_strength > 7.0 and not self.message_received:
-            raise ValueError(
-                "Strong signals (> 7.0) should include received messages")
+            raise PydanticCustomError(
+                "ValueError",
+                "Strong signals (> 7.0) should include received messages"
+            )
 
         return self
 
@@ -138,22 +143,22 @@ def main() -> None:
         del nega_report
     except ValidationError as e:
         # The error caught is an collection (list) of errors
-        # that returned as a list of informed errors by errors method
-        # in the ValidationError(ValueError) inside pydantic_core waited
-        # by rust so we should extract the first error in the list
+        # that returned as a list of informed errors by errors() method
+        # in the ValidationError(ValueError) inside pydantic_core
+        # so we should extract the first error in the list
         # of ErrorDetails objects and since the validation will stop when
-        # first error raised so thicnically the list will containe one object,
+        # first error raised so technically the list will contain one object,
         # and access the msg attribute in the desired ErrorDetails which first
         # one to extract the desired error msg.
 
-        # Usually we wont access to that message
+        # Usually we won't access to that message
         # like that but to match the demo
         # output we going through it.
-        all_errors = e.errors()
-        first_error = all_errors[0]
-        message_expected = first_error["msg"]
-        # Remove the additional inform string (Value error, )
-        print(message_expected.replace("Value error, ", ""))
+        all_errors: List[ErrorDetails] = e.errors()
+        first_error: ErrorDetails = all_errors[0]
+        message_expected: str = first_error["msg"]
+        print(message_expected)
 
 
-main()
+if __name__ == "__main__":
+    main()
