@@ -77,14 +77,22 @@ class AlienContact(BaseModel):
             # in your main or something when creating model instance.
             raise ValueError("Contact ID must start with 'AC'")
 
-        if self.contact_type.value == ContactType.PHYSICAL.value and not self.is_verified:
+        if (
+            self.contact_type.value == ContactType.PHYSICAL.value
+            and not self.is_verified
+        ):
             raise ValueError("Physical contact reports must be verified")
 
-        if self.contact_type.value == ContactType.TELEPATHIC.value and self.witness_count < 3:
-            raise ValueError("Telepathic contact requires at least 3 witnesses")
+        if (
+            self.contact_type.value == ContactType.TELEPATHIC.value
+            and self.witness_count < 3
+        ):
+            raise ValueError(
+                "Telepathic contact requires at least 3 witnesses")
 
         if self.signal_strength > 7.0 and not self.message_received:
-            raise ValueError("Strong signals (> 7.0) should include received messages")
+            raise ValueError(
+                "Strong signals (> 7.0) should include received messages")
 
         return self
 
@@ -126,20 +134,24 @@ def main() -> None:
             witness_count=2,
             message_received=("Greetings from Negggalzo Man"),
         )
+        # Just to silent the not used
+        del nega_report
     except ValidationError as e:
         # The error caught is an collection (list) of errors
         # that returned as a list of informed errors by errors method
-        # in the ValidationError(ValueError) inside pydantic_core waited by rust
-        # so we should extract the first error in the list of ErrorDetails objects
-        # and since the validation will stop when first error raised so thicnically
-        # the list will containe one object, and access the msg attribute in the
-        # desired ErrorDetails which first one to extract the desired error msg.
-        
-        # Usually we wont access to that message like that but to match the demo
+        # in the ValidationError(ValueError) inside pydantic_core waited
+        # by rust so we should extract the first error in the list
+        # of ErrorDetails objects and since the validation will stop when
+        # first error raised so thicnically the list will containe one object,
+        # and access the msg attribute in the desired ErrorDetails which first
+        # one to extract the desired error msg.
+
+        # Usually we wont access to that message
+        # like that but to match the demo
         # output we going through it.
         all_errors = e.errors()
         first_error = all_errors[0]
-        message_expected = first_error['msg']
+        message_expected = first_error["msg"]
         # Remove the additional inform string (Value error, )
         print(message_expected.replace("Value error, ", ""))
 
