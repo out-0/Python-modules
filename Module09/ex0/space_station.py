@@ -40,13 +40,13 @@ def main() -> None:
 
     # Create station instance
     alpha_station: SpaceStation = SpaceStation(
-                                            station_id="ISS001",
-                                            name="International Space Station",
-                                            crew_size=6,
-                                            power_level=85.5,
-                                            oxygen_level=92.3,
-                                            is_operational=True,
-                                               )
+        station_id="ISS001",
+        name="International Space Station",
+        crew_size=6,
+        power_level=85.5,
+        oxygen_level=92.3,
+        is_operational=True,
+    )
 
     print("\n== Space Station Data Validation ==\n")
 
@@ -56,27 +56,28 @@ def main() -> None:
     print(f"Crew: {alpha_station.crew_size} people")
     print(f"Power: {alpha_station.power_level}%")
     print(f"Oxygen: {alpha_station.oxygen_level}%")
-    print(f"Status: {('Operational'
-                      if alpha_station.is_operational
-                      else 'non-operational')}")
+    status: str = ("Operational"
+                   if alpha_station.is_operational
+                   else "non-operational")
+    print(f"Status: {status}")
 
-    print('\n')
+    print("\n")
     print("Invalid station created:")
     # This will fail cause crew outbound the range
     try:
         delta_station: SpaceStation = SpaceStation(
-                                                station_id="ABB002",
-                                                name="Uneverse Space Station",
-                                                crew_size=24,
-                                                power_level=95.5,
-                                                oxygen_level=92.3,
-                                                is_operational=False
-                                                )
+            station_id="ABB002",
+            name="Uneverse Space Station",
+            crew_size=24,
+            power_level=95.5,
+            oxygen_level=92.3,
+            is_operational=False,
+        )
         # This line just to silent flake for unused local variables
         del delta_station
 
     except ValidationError as e:
-        print(e.errors()[0]['msg'])
+        print(e.errors()[0]["msg"])
 
 
 main()

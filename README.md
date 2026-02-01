@@ -84,3 +84,10 @@ also how to design a small system with a complex component.**
 - 2: Play with some high quality libraries like pandas and requests, matplotlib which are a very useful collection.
 
 **The module introduce the real world projects preparation before starting into them which a useful tools to keep the projects stable and isolated**
+
+### Module09
+- 0: Introduction to Data Parsing and Attribute Validation using Pydantic’s BaseModel.
+- 1: Mastering Business Rule Validation using the model_validator decorator in after mode, and also how to implement "cross-field validation," where the validity of one piece of data (like witness_count) depends on the value of another (like contact_type).
+- 2: Managing Recursive Models and Composition by nesting one BaseModel inside another
+
+**This project demonstrates how to build a robust data-governance system using Pydantic v2, moving from basic type enforcement to complex, multi-layered validation logic.**
