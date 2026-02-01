@@ -1,4 +1,4 @@
-### Just as quick note : you may see that in some exercises we use some no sense hardcoded code that we can just replace it with a better approach, well that correct, but just to match the authorized list
+### Just as quick note : you may see that in some exercises we use some no sense hardcoded code that we can just replace it with a better approach, well that correct, but just to match the project restrictions
 
 ### Module00
 - 0: Simple introduction to print function.
