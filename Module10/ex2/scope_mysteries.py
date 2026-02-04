@@ -1,4 +1,4 @@
-from typing import Callable, Any, List, Dict
+from typing import Callable, Any, List, Dict, Union
 
 
 def mage_counter() -> Callable:
@@ -118,7 +118,7 @@ def enchantment_factory(enchantment_type: str) -> Callable:
         variable stored in its enclosing scope's cell object.
 
         Args:
-            item_name (str): The name of the item to be enchanted (ex. "Sword").
+            item_name (str): The name of the item to be enchanted (ex. "Sword")
 
         Returns:
             str: The formatted string "enchantment_type item_name".
