@@ -91,3 +91,10 @@ also how to design a small system with a complex component.**
 - 2: Managing Recursive Models and Composition by nesting one BaseModel inside another
 
 **This project demonstrates how to build a robust data-governance system using Pydantic v2, moving from basic type enforcement to complex, multi-layered validation logic.**
+
+### Module10
+- 0: Lambda Sanctum - Master anonymous functions and lambda expressions
+- 1: Higher Realm - Discover the power of higher-order functions
+- 2: Memory Depths - Understand lexical scoping and closures
+- 3: Ancient Library - Explore the functools module’s treasures
+- 4: Master’s Tower - Create powerful decorators and class methods
