@@ -1,7 +1,7 @@
 from typing import Optional, List, Any, Tuple, Callable
 
 
-def spell_combiner(spell1: callable, spell2: callable) -> callable:
+def spell_combiner(spell1: Callable, spell2: Callable) -> Callable:
     """Constructor that build function that combine two other
     functions with both arguments passed to them
 
@@ -25,7 +25,7 @@ def spell_combiner(spell1: callable, spell2: callable) -> callable:
     # Create a function that take a unknown number of
     # positional or keyword arguments and return
     # tuple result of both functions processing values.
-    def combine(*args: Any, **kwargs: Any) -> tuple:
+    def combine(*args: Any, **kwargs: Any) -> Tuple:
         """Take arbitrary arguments that gonna passed to
         a two functions (spell1, spell2) and Return
         a tuple resulted from the return of the Two
@@ -47,7 +47,7 @@ def spell_combiner(spell1: callable, spell2: callable) -> callable:
     return combine
 
 
-def power_amplifier(base_spell: callable, multiplier: int) -> callable:
+def power_amplifier(base_spell: Callable, multiplier: int) -> Callable:
     """
     Create an amplified version of a spell.
 
@@ -86,7 +86,7 @@ def power_amplifier(base_spell: callable, multiplier: int) -> callable:
     return amplifier
 
 
-def conditional_caster(condition: callable, spell: callable) -> callable:
+def conditional_caster(condition: Callable, spell: Callable) -> Callable:
     """
     Create a conditional spell caster.
 
@@ -124,7 +124,7 @@ def conditional_caster(condition: callable, spell: callable) -> callable:
     return caster
 
 
-def spell_sequence(spells: list[callable]) -> callable:
+def spell_sequence(spells: list[Callable]) -> Callable:
     """
     Create a sequence of spells executed in order.
 
@@ -177,7 +177,7 @@ def main() -> None:
 
             self.name = "Fireball"
 
-        def __call__(self, *args, **kwargs) -> None:
+        def __call__(self, *args, **kwargs) -> str:
             """
             Cast the fireball spell on a target.
 
@@ -231,7 +231,7 @@ def main() -> None:
     class DarkLight:
         """Callable spell that returns a base numeric power value."""
 
-        def __init__(self, base_value: int):
+        def __init__(self, base_value: int) -> None:
             """
             Initialize the spell with a base power value.
 

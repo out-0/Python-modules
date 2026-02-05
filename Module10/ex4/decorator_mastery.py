@@ -223,7 +223,7 @@ class MageGuild:
         """
 
         @power_validator(10)
-        def spell(power: int, spell_name: str):
+        def spell(power: int, spell_name: str) -> str:
             """
             Helper func which will be wraped after validation,
             if power greather or equal the validation power,

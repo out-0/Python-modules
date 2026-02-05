@@ -200,10 +200,10 @@ def main() -> None:
     cast = spell_dispatcher()
 
     # Test each type: int, str, and list
-    print(cast(100))  # Hits the 'int' register 🔢
-    print(cast("Invisibility"))  # Hits the 'str' register 🔤
-    print(cast(["Orc 1", "Orc 2"]))  # Hits the 'list' register 📋
-    print(cast(12.5))  # Hits the default case ❓
+    print(cast(100))
+    print(cast("Invisibility"))
+    print(cast(["Orc 1", "Orc 2"]))
+    print(cast(12.5))
 
 
 if __name__ == "__main__":
