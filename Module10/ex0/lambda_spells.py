@@ -81,7 +81,8 @@ def mage_stats(mages: list[dict]) -> dict:
     # Extract statistics
     most_powerful: dict = max(mages, key=lambda element: element["power"])
     least_powerful: dict = min(mages, key=lambda element: element["power"])
-    sum_of_powers: float = sum(mage["power"] for mage in mages)
+    sum_of_powers: float = sum(map(lambda mage: mage['power'], mages))
+
     # Round the average to 2 decimal(2.546 -> 2.55 | 2.434 -> 2.43)
     average: float = round(sum_of_powers / len(mages), 2)
 
